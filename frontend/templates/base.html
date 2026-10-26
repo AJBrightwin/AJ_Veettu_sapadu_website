@@ -1,0 +1,365 @@
+{% load static ajvs %}<!doctype html>
+<html lang="{{ lang }}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{% block title %}{{ T.brand }}{% endblock %} · {{ T.tagline }}</title>
+<meta name="description" content="{% block description %}{{ T.hero_sub }}{% endblock %}">
+<meta property="og:title" content="{{ T.brand }}">
+<meta property="og:description" content="{{ T.hero_sub }}">
+<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'img/og-image.jpg' %}">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#1D5E2A">
+<link rel="icon" href="{% static 'favicon/favicon.ico' %}" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}">
+<link rel="icon" type="image/png" sizes="192x192" href="{% static 'favicon/android-chrome-192x192.png' %}">
+<link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png' %}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Thambi+2:wght@500;600;700;800&family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Noto+Serif+Tamil:wght@400;500;600;700&display=swap">
+{# Change v=26 to a new number whenever you update CSS/JS, so browsers load the new files #}
+<link rel="stylesheet" href="{% static 'css/style.css' %}?v=26">
+<link rel="stylesheet" href="{% static 'css/cart.css' %}?v=1">
+<script>document.documentElement.classList.add("js");</script>
+{% block head %}{% endblock %}
+</head>
+<body class="lang-{{ lang }} page-{{ page|default:'other' }}">
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header" data-header>
+  {% if not site.kitchen_open %}
+  <div class="closed-banner" role="status">{% if lang == "ta" %}{{ site.closed_message_ta }}{% else %}{{ site.closed_message_en }}{% endif %}</div>
+  {% endif %}
+  <div class="wrap header-inner">
+
+    <a class="brand" href="{% url 'core:home' %}" aria-label="AJ வீட்டு சாப்பாடு, {{ T.nav_home }}">
+      <span class="wm" aria-hidden="true">
+        <span class="wm-aj">
+          <span class="wm-word" data-wm>AJ</span>
+          <svg class="wm-leaf" width="14" height="14" viewBox="0 0 24 24"><path d="M4 18C6 9 14 4 21 4c0 7-5 15-15 15z" fill="#2E8B2E"/><path d="M5 19 15 9" stroke="#F4C430" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </span>
+        <span class="wm-ta"><span class="wm-word" data-wm>வீட்டு</span> <span class="wm-word" data-wm>சாப்பாடு</span></span>
+      </span>
+    </a>
+
+    <nav class="nav-desktop" aria-label="Main">
+      <ul class="nav-pill" data-nav-pill>
+        <li><a href="{% url 'core:home' %}" {% if page == "home" %}aria-current="page"{% endif %}>{{ T.nav_home }}</a></li>
+        <li><a href="{% url 'menu:menu' %}" {% if page == "menu" %}aria-current="page"{% endif %}>{{ T.nav_menu }}</a></li>
+        <li><a href="{% url 'core:story' %}" {% if page == "story" %}aria-current="page"{% endif %}>{{ T.nav_story }}</a></li>
+        <li><a href="{% url 'core:contact' %}" {% if page == "contact" %}aria-current="page"{% endif %}>{{ T.nav_contact }}</a></li>
+      </ul>
+      <span class="nav-indicator" data-nav-indicator aria-hidden="true"></span>
+    </nav>
+
+    <div class="header-actions">
+      <div class="lang-seg" role="group" aria-label="Language">
+        <a href="{% url 'core:set_language' 'en' %}?next={{ request.get_full_path|urlencode }}" lang="en" {% if lang == "en" %}aria-current="true"{% endif %}>EN</a>
+        <a href="{% url 'core:set_language' 'ta' %}?next={{ request.get_full_path|urlencode }}" lang="ta" {% if lang == "ta" %}aria-current="true"{% endif %}>தமிழ்</a>
+      </div>
+
+      <button class="cart-btn" type="button" data-cart-open aria-label="{{ T.cart }}">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6h15l-1.5 9h-12z"/><path d="M6 6 5 3H2"/><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/></svg>
+        <span class="cart-count" data-cart-count>0</span>
+      </button>
+
+      <a class="btn btn-primary btn-shine header-cta" href="{% url 'menu:menu' %}" data-magnetic>{{ T.order_now }}</a>
+
+      <button class="burger" type="button" data-burger aria-expanded="false" aria-controls="mobile-menu" aria-label="{{ T.open_menu }}" data-label-open="{{ T.open_menu }}" data-label-close="{{ T.close_menu }}">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobile-menu" data-mobile-menu aria-hidden="true">
+  <div class="mm-bg" aria-hidden="true">
+    <span class="mm-rays"></span>
+    <span class="mm-glow"></span>
+    <span class="mm-glow mm-glow-2"></span>
+  </div>
+  <span class="mm-edge" aria-hidden="true"></span>
+
+  <div class="mm-inner">
+    <div class="mm-sign-wrap" aria-hidden="true">
+      <svg class="mm-sign" viewBox="0 0 360 112" width="360" height="112">
+        <defs>
+          <linearGradient id="mmInk" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#FFF1BF"/><stop offset=".35" stop-color="#F4C430"/>
+            <stop offset=".7" stop-color="#D9A21E"/><stop offset="1" stop-color="#FFE08A"/>
+          </linearGradient>
+          <linearGradient id="mmShine" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="90" y2="0">
+            <stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
+            <animateTransform attributeName="gradientTransform" type="translate" values="-140 0; 420 0; 420 0" keyTimes="0; .55; 1" dur="5s" repeatCount="indefinite"/>
+          </linearGradient>
+          <linearGradient id="mmEdge" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#fff"/><stop offset=".9" stop-color="#fff"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
+          </linearGradient>
+          <mask id="mmReveal" maskUnits="userSpaceOnUse" x="0" y="0" width="360" height="112">
+            <rect class="mm-reveal" x="0" y="0" width="360" height="112" fill="url(#mmEdge)"/>
+          </mask>
+          <radialGradient id="mmPenGlow"><stop offset="0" stop-color="#FFF6D6"/><stop offset=".35" stop-color="#F4C430" stop-opacity=".9"/><stop offset="1" stop-color="#F4C430" stop-opacity="0"/></radialGradient>
+        </defs>
+        <g mask="url(#mmReveal)">
+          <text class="mm-ink" x="180" y="60" text-anchor="middle"><tspan class="mm-ink-aj">AJ</tspan> வீட்டு சாப்பாடு</text>
+          <text class="mm-shine" x="180" y="60" text-anchor="middle">AJ வீட்டு சாப்பாடு</text>
+        </g>
+        <path class="mm-swash" d="M62 88 C 110 80, 150 96, 196 88 S 270 76, 300 86 q 10 4 2 8"/>
+        <g class="mm-pen"><circle r="11" fill="url(#mmPenGlow)"/><path d="M0 -7 L1.6 -1.6 L7 0 L1.6 1.6 L0 7 L-1.6 1.6 L-7 0 L-1.6 -1.6 Z" fill="#FFF8E1"/></g>
+      </svg>
+      <p class="mm-tag"><span class="mm-tag-rule"></span><span>{{ T.footer_motto }}</span><span class="mm-tag-rule"></span></p>
+    </div>
+
+    <nav class="mobile-nav" aria-label="Main">
+      <a href="{% url 'core:home' %}" style="--i:0" {% if page == "home" %}aria-current="page"{% endif %}><span class="mm-n">01</span><span class="mm-label" data-mm-split>{{ T.nav_home }}</span><svg class="mm-go" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a href="{% url 'menu:menu' %}" style="--i:1" {% if page == "menu" %}aria-current="page"{% endif %}><span class="mm-n">02</span><span class="mm-label" data-mm-split>{{ T.nav_menu }}</span><svg class="mm-go" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a href="{% url 'core:story' %}" style="--i:2" {% if page == "story" %}aria-current="page"{% endif %}><span class="mm-n">03</span><span class="mm-label" data-mm-split>{{ T.nav_story }}</span><svg class="mm-go" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a href="{% url 'core:contact' %}" style="--i:3" {% if page == "contact" %}aria-current="page"{% endif %}><span class="mm-n">04</span><span class="mm-label" data-mm-split>{{ T.nav_contact }}</span><svg class="mm-go" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    </nav>
+
+    <div class="mm-card">
+      <div class="mm-status">
+        <span class="mm-dot{% if not site.kitchen_open %} is-closed{% endif %}" aria-hidden="true"></span>
+        <span>{% if site.kitchen_open %}{{ T.open_now }}{% else %}{{ T.closed_now }}{% endif %}</span>
+      </div>
+      <p class="mm-hours">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+        {% if lang == "ta" %}{{ site.order_hours_ta }}{% else %}{{ site.order_hours_en }}{% endif %}
+      </p>
+      {% if site.phone %}
+      <a class="mm-phone" href="tel:{{ site.phone|cut:' ' }}">
+        <span class="mm-phone-ic" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg></span>
+        {{ site.phone }}
+      </a>
+      {% endif %}
+      <div class="mm-actions">
+        <div class="lang-seg lang-seg-light" role="group" aria-label="Language">
+          <a href="{% url 'core:set_language' 'en' %}?next={{ request.get_full_path|urlencode }}" lang="en" {% if lang == "en" %}aria-current="true"{% endif %}>EN</a>
+          <a href="{% url 'core:set_language' 'ta' %}?next={{ request.get_full_path|urlencode }}" lang="ta" {% if lang == "ta" %}aria-current="true"{% endif %}>தமிழ்</a>
+        </div>
+        <a class="btn btn-yellow mm-order" href="{% url 'menu:menu' %}"><span>{{ T.order_now }}</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main id="main">
+  {% if messages %}
+  <div class="wrap">
+    {% for m in messages %}<p class="flash flash-{{ m.tags }}" role="status">{{ m }}</p>{% endfor %}
+  </div>
+  {% endif %}
+  {% block content %}{% endblock %}
+</main>
+
+<footer class="site-footer">
+  <div class="ft-glow" aria-hidden="true"></div>
+
+  {# ---- trust badges ---- #}
+  <div class="wrap">
+    <ul class="ft-badges" data-reveal>
+      <li>
+        <span class="ft-badge-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-5h4v5"/></svg></span>
+        <span>{{ T.badge_home }}</span>
+      </li>
+      <li>
+        <span class="ft-badge-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3c4 3 7 6 7 10a7 7 0 0 1-14 0c0-4 3-7 7-10z"/><path d="M9 13.5l2 2 4-4"/></svg></span>
+        <span>{{ T.badge_nopres }}</span>
+      </li>
+      <li>
+        <span class="ft-badge-ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19C6 10 13 5 20 5c0 7-5 14-14 14z"/><path d="M5 20 14 11"/></svg></span>
+        <span>{{ T.badge_fresh }}</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="wrap ft-grid">
+
+    {# ---- brand ---- #}
+    <div class="ft-col ft-brand">
+      <a class="ft-logo" href="{% url 'core:home' %}" aria-label="{{ T.brand }}">
+        <span class="fs" data-reveal aria-hidden="true">
+          <span class="fs-shadow"></span>
+          <span class="fs-dust"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+          <span class="fs-seal">
+            <picture>
+              <source srcset="{% static 'img/logo-160.webp' %}" type="image/webp">
+              <img src="{% static 'img/logo-160.png' %}" alt="" width="70" height="70" loading="lazy">
+            </picture>
+            <span class="fs-flash"></span>
+            <span class="fs-shine"></span>
+          </span>
+        </span>
+        <span class="ft-name"><span class="ft-name-aj">AJ</span> <span class="ta-name">வீட்டு சாப்பாடு</span></span>
+      </a>
+      <p class="ft-motto">“{{ T.footer_motto }}”</p>
+      <p class="ft-desc">{{ T.footer_tag }}</p>
+
+      <p class="ft-h ft-h-sm">{{ T.footer_order_on }}</p>
+      <div class="ft-apps">
+        {% if site.swiggy_url %}
+        <a class="ft-app" href="{{ site.swiggy_url }}" target="_blank" rel="noopener"><span class="ft-app-dot ft-swiggy" aria-hidden="true"></span>Swiggy<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
+        {% else %}
+        <span class="ft-app is-soon"><span class="ft-app-dot ft-swiggy" aria-hidden="true"></span>Swiggy<small>{{ T.coming_soon }}</small></span>
+        {% endif %}
+        {% if site.zomato_url %}
+        <a class="ft-app" href="{{ site.zomato_url }}" target="_blank" rel="noopener"><span class="ft-app-dot ft-zomato" aria-hidden="true"></span>Zomato<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
+        {% else %}
+        <span class="ft-app is-soon"><span class="ft-app-dot ft-zomato" aria-hidden="true"></span>Zomato<small>{{ T.coming_soon }}</small></span>
+        {% endif %}
+      </div>
+      {% if site.fssai_number %}<p class="ft-fssai">{{ T.fssai }}: <strong>{{ site.fssai_number }}</strong></p>{% endif %}
+    </div>
+
+    {# ---- explore ---- #}
+    <nav class="ft-col" aria-label="{{ T.footer_explore }}">
+      <p class="ft-h">{{ T.footer_explore }}</p>
+      <ul class="ft-links">
+        <li><a href="{% url 'core:home' %}">{{ T.nav_home }}</a></li>
+        <li><a href="{% url 'menu:menu' %}">{{ T.nav_menu }}</a></li>
+        <li><a href="{% url 'core:story' %}">{{ T.nav_story }}</a></li>
+        <li><a href="{% url 'core:contact' %}">{{ T.nav_contact }}</a></li>
+      </ul>
+    </nav>
+
+    {# ---- kitchen: hours, delivery, contact, address ---- #}
+    <div class="ft-col">
+      <p class="ft-h">{{ T.footer_kitchen }}</p>
+      <ul class="ft-info">
+        <li>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+          <span>{% if lang == "ta" %}{{ site.order_hours_ta }}{% else %}{{ site.order_hours_en }}{% endif %}</span>
+        </li>
+        <li>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7"/><circle cx="7" cy="17.5" r="1.6"/><circle cx="17.5" cy="17.5" r="1.6"/></svg>
+          <span>{{ T.footer_deliver }}</span>
+        </li>
+        {% if site.phone %}
+        <li>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg>
+          <a href="tel:{{ site.phone|cut:' ' }}">{{ site.phone }}</a>
+        </li>
+        {% endif %}
+        {% if site.whatsapp %}
+        <li>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l1.3-4A8 8 0 1 1 8 18.7z"/><path d="M9 9.5c.3 2 1.8 3.8 4 4.5l1-1.2 1.8.8c-.2 1-1 1.6-2 1.5A6 6 0 0 1 8 9.8c0-1 .6-1.8 1.5-2l.8 1.8z"/></svg>
+          <a href="https://wa.me/{{ site.whatsapp }}" target="_blank" rel="noopener">{{ T.whatsapp }} · +{{ site.whatsapp }}</a>
+        </li>
+        {% endif %}
+        {% if site.email %}
+        <li>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg>
+          <a href="mailto:{{ site.email }}">{{ site.email }}</a>
+        </li>
+        {% endif %}
+        <li>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>
+          <address>{% if lang == "ta" %}{{ site.address_ta|linebreaksbr }}{% else %}{{ site.address_en|linebreaksbr }}{% endif %}</address>
+        </li>
+      </ul>
+    </div>
+
+    {# ---- today's menu on WhatsApp ---- #}
+    <div class="ft-col">
+      <form class="ft-sub" method="post" action="{% url 'core:subscribe' %}" data-sub>
+        {% csrf_token %}
+        <span class="ft-sub-ic" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1.3-4A8 8 0 1 1 8 18.7z"/><path d="M9 11h6M9 14h4"/></svg></span>
+        <p class="ft-sub-t">{{ T.sub_title }}</p>
+        <p class="ft-sub-d">{{ T.sub_desc }}</p>
+        <label class="visually-hidden" for="sub-phone">{{ T.sub_ph }}</label>
+        <div class="ft-sub-row">
+          <span class="ft-sub-cc" aria-hidden="true">+91</span>
+          <input id="sub-phone" name="phone" type="tel" inputmode="numeric" autocomplete="tel-national" maxlength="14" placeholder="{{ T.sub_ph }}" required>
+        </div>
+        <input class="ft-trap" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <button class="btn btn-yellow btn-block ft-sub-btn" type="submit"><span>{{ T.sub_btn }}</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+        <p class="ft-sub-msg" data-sub-msg role="status" aria-live="polite"></p>
+        <p class="ft-sub-note">{{ T.sub_note }}</p>
+      </form>
+    </div>
+  </div>
+
+  {# ---- bottom bar ---- #}
+  <div class="ft-bottom">
+    <div class="wrap ft-bottom-inner">
+      <p class="ft-copy">© {% now "Y" %} <span class="ta-name">{{ T.brand }}</span>. {{ T.rights }}</p>
+      <nav class="ft-policies" aria-label="Policies">
+        <a href="{% url 'core:terms' %}">{{ T.pol_terms }}</a>
+        <a href="{% url 'core:privacy' %}">{{ T.pol_privacy }}</a>
+        <a href="{% url 'core:refund' %}">{{ T.pol_refund }}</a>
+        <a href="{% url 'core:delivery' %}">{{ T.pol_delivery }}</a>
+      </nav>
+      <a class="aj-built" href="https://wa.me/919092631501?text=Hi%20AJ%20Technologies%2C%20I%20saw%20AJ%20%E0%AE%B5%E0%AF%80%E0%AE%9F%E0%AF%8D%E0%AE%9F%E0%AF%81%20%E0%AE%9A%E0%AE%BE%E0%AE%AA%E0%AF%8D%E0%AE%AA%E0%AE%BE%E0%AE%9F%E0%AF%81%20website%20and%20I%20want%20a%20website%2Fapp" target="_blank" rel="noopener" aria-label="Built by AJ Technologies – We Build, You Grow">
+        <i class="aj-gear" aria-hidden="true"><picture><source srcset="{% static 'img/ajtech-gear-light-96.webp' %}" type="image/webp"><img src="{% static 'img/ajtech-gear-light-96.png' %}" alt="" width="30" height="30" loading="lazy"></picture></i>
+        <span><span class="aj-by">Built by </span><b>AJ Technologies</b></span><span class="aj-tag">We Build, You Grow</span>
+      </a>
+    </div>
+  </div>
+</footer>
+
+<button class="to-top" type="button" data-to-top aria-label="Back to top">
+  <svg class="to-top-ring" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="21" pathLength="100" data-to-top-ring/></svg>
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg>
+</button>
+<div class="cursor" data-cursor aria-hidden="true"></div>
+
+<div class="drawer-backdrop" data-cart-close hidden></div>
+<aside class="cart-drawer" id="cart-drawer" aria-label="{{ T.your_cart }}" aria-hidden="true" data-menu-url="{% url 'menu:menu' %}" data-min="{{ site.min_order_amount|default:0 }}">
+  <span class="cd-frame" aria-hidden="true"></span>
+  <header class="cd-head">
+    <button type="button" class="cd-back" data-cart-close aria-label="{{ T.cd_back }}">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+    </button>
+    <div class="cd-title">
+      <p class="cd-kicker"><span>✦</span> {{ T.brand }} <span>✦</span></p>
+      <h2>{{ T.your_cart }}</h2>
+      <p class="cd-sub"><span data-cd-count>0</span> · <span data-cart-subtotal>₹0</span></p>
+    </div>
+    <button type="button" class="cd-x" data-cart-close aria-label="{{ T.close }}">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+  </header>
+
+  <div class="cd-scroll" data-cd-scroll>
+    <div class="cd-min" data-cd-min hidden>
+      <p><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span data-cd-min-t></span></p>
+      <span class="cd-min-bar"><i data-cd-min-bar></i></span>
+    </div>
+
+    <div class="cd-items" data-cart-items></div>
+
+    <section class="cd-sugg" data-cd-sugg hidden>
+      <h3 class="cd-h3"><span>{{ T.cd_suggest }}</span></h3>
+      <div class="cd-sugg-row" data-cd-sugg-row></div>
+    </section>
+
+    <section class="cd-bill" data-cd-bill hidden>
+      <h3 class="cd-h3"><span>{{ T.cd_bill }}</span></h3>
+      <div class="cd-bill-row"><span>{{ T.cd_item_total }} (<span data-cd-count>0</span>)</span><b data-cart-subtotal>₹0</b></div>
+      <div class="cd-bill-row"><span>{{ T.cd_delivery }}</span><span class="cd-muted">{{ T.cd_delivery_v }}</span></div>
+      <div class="cd-bill-row cd-bill-total"><span>{{ T.cd_to_pay }}</span><b data-cart-subtotal>₹0</b></div>
+      <p class="cd-fresh"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg>{{ T.cd_fresh }}</p>
+    </section>
+  </div>
+
+  <footer class="cd-foot" data-cd-foot>
+    {% if site.kitchen_open %}
+    <a class="cd-pay" href="{% url 'orders:checkout' %}" data-checkout-link>
+      <span class="cd-pay-amt"><small>{{ T.cd_total }}</small><b data-cart-subtotal>₹0</b></span>
+      <span class="cd-pay-go">{{ T.cd_proceed }}<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      <i class="cd-pay-sheen" aria-hidden="true"></i>
+    </a>
+    {% else %}
+    <p class="cd-closed"><span aria-hidden="true"></span>{% if lang == "ta" %}{{ site.closed_message_ta }}{% else %}{{ site.closed_message_en }}{% endif %}</p>
+    {% endif %}
+  </footer>
+</aside>
+
+{{ cart_catalog|json_script:"ajvs-catalog" }}
+<script id="ajvs-i18n" type="application/json">{"lang":"{{ lang }}","empty":"{{ T.cart_empty|escapejs }}","remove":"{{ T.remove|escapejs }}","added":"{{ T.added|escapejs }}","add":"{{ T.add|escapejs }}","item":"{{ T.mn_item|escapejs }}","items":"{{ T.mn_items|escapejs }}","emptyT":"{{ T.cd_empty_t|escapejs }}","emptyD":"{{ T.cd_empty_d|escapejs }}","browse":"{{ T.cd_browse|escapejs }}","each":"{{ T.cd_each|escapejs }}","min":"{{ T.cd_min|escapejs }}","veg":"{{ T.veg|escapejs }}","nonveg":"{{ T.nonveg|escapejs }}"}</script>
+<script src="{% static 'js/site.js' %}?v=26" defer></script>
+<script src="{% static 'js/cart.js' %}?v=29" defer></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

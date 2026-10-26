@@ -1,0 +1,106 @@
+{# Hand-drawn dish illustration. Use: {% include "dish_art.html" with art=dish.art_key %} #}
+<svg class="art art-{{ art }}" viewBox="0 0 200 150" aria-hidden="true" focusable="false">
+<ellipse class="art-sh" cx="100" cy="136" rx="78" ry="9" fill="url(#ag-shadow)"/>
+{% if art == "biryani" %}
+  <g class="st"><path d="M70 40c-6-8 5-12 0-21"/><path d="M100 34c-6-8 5-12 0-21"/><path d="M130 40c-6-8 5-12 0-21"/></g>
+  <path d="M40 72c-4 46 24 62 60 62s64-16 60-62z" fill="url(#ag-gold-v)" stroke="#6F4A0C" stroke-width="2.4"/>
+  <path d="M46 98c34 13 74 13 108 0" stroke="#FFE9A6" stroke-width="2.2" fill="none" opacity=".75"/>
+  <path d="M30 76c-8 0-10 10-2 12M170 76c8 0 10 10 2 12" stroke="#6F4A0C" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <ellipse cx="100" cy="72" rx="62" ry="12" fill="#B8860F" stroke="#6F4A0C" stroke-width="2.4"/>
+  <path d="M44 70c6-28 106-28 112 0z" fill="url(#ag-rice)"/>
+  <g fill="#E98A15"><circle cx="76" cy="57" r="2.6"/><circle cx="100" cy="50" r="2.6"/><circle cx="124" cy="58" r="2.6"/><circle cx="90" cy="64" r="2.2"/><circle cx="114" cy="66" r="2"/></g>
+  <g fill="#C8641E"><ellipse cx="84" cy="54" rx="7" ry="4.4"/><ellipse cx="118" cy="50" rx="6" ry="4"/></g>
+  <g fill="#3E9A2C"><ellipse cx="94" cy="55" rx="5.4" ry="2.4" transform="rotate(-20 94 55)"/><ellipse cx="128" cy="62" rx="5" ry="2.2" transform="rotate(25 128 62)"/><ellipse cx="70" cy="64" rx="4.6" ry="2.2" transform="rotate(10 70 64)"/></g>
+{% elif art == "curry" %}
+  <g class="st"><path d="M78 46c-6-8 5-12 0-21"/><path d="M100 40c-6-8 5-12 0-21"/><path d="M122 46c-6-8 5-12 0-21"/></g>
+  <path d="M26 74h148c0 36-32 58-74 58S26 110 26 74z" fill="url(#ag-gold-v)" stroke="#6F4A0C" stroke-width="2.4"/>
+  <path d="M40 100c38 14 82 14 120 0" stroke="#FFE9A6" stroke-width="2" fill="none" opacity=".7"/>
+  <ellipse cx="100" cy="74" rx="74" ry="15" fill="url(#ag-curry)" stroke="#6F4A0C" stroke-width="2"/>
+  <g fill="#F0B070"><ellipse cx="78" cy="72" rx="13" ry="7"/><ellipse cx="114" cy="77" rx="14" ry="7"/><ellipse cx="134" cy="68" rx="9" ry="5"/></g>
+  <path d="M60 70c10 6 22 6 30 2M104 66c12 4 22 2 30-2" stroke="#FFD8A8" stroke-width="1.6" fill="none" opacity=".7"/>
+  <g fill="#3E9A2C"><circle cx="96" cy="68" r="2.6"/><circle cx="68" cy="78" r="2.2"/><circle cx="146" cy="76" r="2.2"/><ellipse cx="124" cy="80" rx="5" ry="2.2" transform="rotate(-15 124 80)"/></g>
+{% elif art == "fish" %}
+  <ellipse cx="100" cy="94" rx="84" ry="36" fill="url(#ag-plate)" stroke="url(#ag-gold)" stroke-width="3.4"/>
+  <ellipse cx="100" cy="94" rx="70" ry="27" fill="none" stroke="#E7D9B4" stroke-width="1.4"/>
+  <g class="fl">
+    <path d="M38 90c22-30 80-34 114-4-32 30-90 32-114 4z" fill="url(#ag-fry)"/>
+    <path d="M150 86l24-18v38z" fill="#8E3A10"/>
+    <circle cx="56" cy="86" r="3.4" fill="#2B1A0E"/><circle cx="55" cy="85" r="1" fill="#fff"/>
+    <path d="M72 74l9 24M92 70l9 28M112 70l9 28M132 76l6 20" stroke="#7A2E0C" stroke-width="2.6" stroke-linecap="round" opacity=".75"/>
+    <path d="M70 80c20-8 50-8 70 2" stroke="#FFC27A" stroke-width="2" fill="none" opacity=".6"/>
+  </g>
+  <circle cx="150" cy="114" r="10" fill="#F4E04D" stroke="#C9B12A" stroke-width="2"/><path d="M144 114h12M150 108v12" stroke="#C9B12A" stroke-width="1.2"/>
+  <path d="M34 110c9-7 20-7 25 0" stroke="#3E9A2C" stroke-width="4.4" stroke-linecap="round" fill="none"/>
+  <g fill="#B5260F"><circle cx="64" cy="118" r="2.4"/><circle cx="72" cy="121" r="2"/></g>
+{% elif art == "chicken" %}
+  <ellipse cx="100" cy="96" rx="82" ry="34" fill="url(#ag-plate)" stroke="url(#ag-gold)" stroke-width="3.4"/>
+  <g class="fl">
+    <path d="M52 92c-6-18 14-30 30-20 10 8 4 26-10 28-10 1-18-1-20-8z" fill="url(#ag-fry)"/>
+    <path d="M88 84c-2-20 22-26 34-14 8 10-2 26-16 26-10 0-18-4-18-12z" fill="#B8441A"/>
+    <path d="M118 98c-2-16 18-22 28-12 8 8 0 22-12 22-8 0-15-3-16-10z" fill="url(#ag-fry)"/>
+    <path d="M70 100c-4-12 10-20 20-14 8 6 4 18-6 20-7 1-12-1-14-6z" fill="#C9521C"/>
+    <g fill="#7A2E0C" opacity=".55"><circle cx="66" cy="84" r="2"/><circle cx="102" cy="78" r="2"/><circle cx="134" cy="96" r="2"/><circle cx="80" cy="96" r="1.6"/></g>
+    <g fill="#FFC27A" opacity=".7"><circle cx="60" cy="80" r="1.6"/><circle cx="96" cy="74" r="1.6"/><circle cx="126" cy="90" r="1.6"/></g>
+  </g>
+  <g fill="#3E9A2C"><ellipse cx="150" cy="80" rx="8" ry="3.2" transform="rotate(-30 150 80)"/><ellipse cx="46" cy="108" rx="7" ry="3" transform="rotate(20 46 108)"/></g>
+  <path d="M140 112c8 4 16 2 20-4" stroke="#F4E04D" stroke-width="5" stroke-linecap="round" fill="none"/>
+{% elif art == "egg" %}
+  <ellipse cx="100" cy="96" rx="82" ry="34" fill="url(#ag-plate)" stroke="url(#ag-gold)" stroke-width="3.4"/>
+  <g class="fl">
+    <ellipse cx="78" cy="92" rx="26" ry="18" fill="#fff" stroke="#EADFC4" stroke-width="1.4"/><circle cx="80" cy="90" r="10" fill="#F4B521"/><circle cx="77" cy="87" r="3" fill="#FFE08A"/>
+    <ellipse cx="128" cy="96" rx="24" ry="16" fill="#fff" stroke="#EADFC4" stroke-width="1.4"/><circle cx="126" cy="95" r="9" fill="#F4B521"/><circle cx="123" cy="92" r="2.6" fill="#FFE08A"/>
+  </g>
+  <g fill="#B5260F"><circle cx="100" cy="80" r="1.8"/><circle cx="112" cy="110" r="1.6"/><circle cx="62" cy="108" r="1.6"/></g>
+  <g fill="#3E9A2C"><circle cx="96" cy="108" r="2"/><circle cx="146" cy="84" r="2"/></g>
+{% elif art == "veg" %}
+  <path d="M30 78h140c0 32-30 52-70 52S30 110 30 78z" fill="url(#ag-gold-v)" stroke="#6F4A0C" stroke-width="2.4"/>
+  <ellipse cx="100" cy="78" rx="70" ry="14" fill="#5E9A2E" stroke="#6F4A0C" stroke-width="2"/>
+  <g class="fl">
+    <g fill="#8CCB4E"><circle cx="72" cy="72" r="6"/><circle cx="96" cy="68" r="7"/><circle cx="122" cy="72" r="6"/><circle cx="84" cy="80" r="5"/><circle cx="112" cy="81" r="5"/></g>
+    <g fill="#F08A24"><rect x="62" y="76" width="9" height="6" rx="1.6"/><rect x="104" y="70" width="9" height="6" rx="1.6" transform="rotate(20 108 73)"/><rect x="132" y="76" width="8" height="6" rx="1.6"/></g>
+    <g fill="#FFF6DA"><circle cx="90" cy="74" r="2"/><circle cx="118" cy="66" r="2"/><circle cx="140" cy="70" r="1.8"/><circle cx="66" cy="68" r="1.8"/></g>
+  </g>
+  <path d="M44 102c36 13 76 13 112 0" stroke="#FFE9A6" stroke-width="2" fill="none" opacity=".7"/>
+{% elif art == "sweet" %}
+  <g class="st"><path d="M88 46c-6-8 5-12 0-21"/><path d="M112 46c-6-8 5-12 0-21"/></g>
+  <path d="M42 76h116c0 32-26 52-58 52S42 108 42 76z" fill="url(#ag-gold-v)" stroke="#6F4A0C" stroke-width="2.4"/>
+  <ellipse cx="100" cy="76" rx="58" ry="12" fill="#F3DDAE" stroke="#6F4A0C" stroke-width="2"/>
+  <path d="M60 76c10-5 22-5 30 0s22 5 30 0 16-5 22 0" stroke="#E2BF7C" stroke-width="2" fill="none"/>
+  <g class="fl"><g fill="#C98A3A"><ellipse cx="80" cy="72" rx="5" ry="3"/><ellipse cx="120" cy="74" rx="5" ry="3"/></g>
+  <g fill="#FFF3D6"><ellipse cx="98" cy="70" rx="4" ry="2.4"/><ellipse cx="108" cy="78" rx="3.6" ry="2.2"/></g>
+  <g fill="#8A3FA0"><circle cx="90" cy="78" r="2.2"/><circle cx="130" cy="70" r="2"/></g></g>
+  <path d="M56 100c28 11 60 11 88 0" stroke="#FFE9A6" stroke-width="2" fill="none" opacity=".7"/>
+{% elif art == "drink" %}
+  <g class="fl">
+    <path d="M68 22h64l-10 108H78z" fill="url(#ag-glass)" stroke="url(#ag-gold)" stroke-width="3.4" stroke-linejoin="round"/>
+    <path d="M72 48h56l-8 78H80z" fill="#EEF4E4"/>
+    <path d="M72 48h56" stroke="#D5E3C6" stroke-width="2"/>
+    <g fill="#B9CCA2"><circle cx="90" cy="84" r="2.2"/><circle cx="108" cy="98" r="2.2"/><circle cx="96" cy="110" r="1.8"/><circle cx="114" cy="70" r="1.8"/></g>
+    <g fill="#3E9A2C"><ellipse cx="106" cy="42" rx="11" ry="4.6" transform="rotate(-30 106 42)"/><ellipse cx="94" cy="38" rx="8.6" ry="3.8" transform="rotate(22 94 38)"/></g>
+    <path d="M118 30l18-20" stroke="#E98A15" stroke-width="5" stroke-linecap="round"/>
+    <path d="M80 30l-2 90" stroke="#fff" stroke-width="3" opacity=".7" stroke-linecap="round"/>
+  </g>
+{% elif art == "combo" %}
+  <ellipse cx="84" cy="94" rx="72" ry="36" fill="url(#ag-plate)" stroke="url(#ag-gold)" stroke-width="3.4"/>
+  <path d="M28 96c18-34 80-46 116-24-16 32-78 46-116 24z" fill="url(#ag-leaf)"/>
+  <path d="M32 95 142 73" stroke="#DFF3CF" stroke-width="1.6" opacity=".8"/>
+  <ellipse cx="80" cy="86" rx="22" ry="11" fill="url(#ag-rice)"/>
+  <circle cx="112" cy="80" r="9" fill="#E98A15" stroke="#B5650C" stroke-width="1.6"/><circle cx="56" cy="96" r="8" fill="#7CB342" stroke="#4E7F22" stroke-width="1.6"/>
+  <g class="fl"><path d="M136 56h48c0 24-12 38-24 38s-24-14-24-38z" fill="url(#ag-gold-v)" stroke="#6F4A0C" stroke-width="2"/><ellipse cx="160" cy="56" rx="24" ry="6.4" fill="url(#ag-curry)"/>
+  <g fill="#F0B070"><ellipse cx="154" cy="55" rx="6" ry="2.6"/><ellipse cx="168" cy="57" rx="5" ry="2.2"/></g></g>
+  <g class="st"><path d="M152 40c-5-7 4-10 0-17"/><path d="M168 40c-5-7 4-10 0-17"/></g>
+{% else %}{# meal: banana-leaf meals #}
+  <g class="fl">
+    <path d="M10 112C30 44 152 12 192 30c-14 70-120 110-182 82z" fill="url(#ag-leaf)"/>
+    <path d="M16 110 186 34" stroke="#DFF3CF" stroke-width="2.2" opacity=".85"/>
+    <path d="M60 92 40 70M90 80 74 54M120 68 108 44M150 56 142 36M80 86l18 22M112 72l22 22M144 60l22 18" stroke="#BFE5A4" stroke-width="1.1" opacity=".55"/>
+    <ellipse cx="98" cy="80" rx="32" ry="17" fill="url(#ag-rice)"/>
+    <g fill="#E9DFC4"><circle cx="88" cy="76" r="1.6"/><circle cx="102" cy="83" r="1.6"/><circle cx="110" cy="74" r="1.4"/><circle cx="94" cy="86" r="1.4"/></g>
+    <circle cx="146" cy="58" r="14" fill="#E98A15" stroke="#B5650C" stroke-width="2"/><path d="M138 56c5-3 11-3 15 1" stroke="#FFC27A" stroke-width="1.6" fill="none"/>
+    <circle cx="54" cy="96" r="12" fill="#7CB342" stroke="#4E7F22" stroke-width="2"/>
+    <circle cx="132" cy="90" r="12" fill="#fff" stroke="#D9D2BC" stroke-width="2"/>
+    <circle cx="170" cy="44" r="10" fill="#C23B22" stroke="#8E2A16" stroke-width="2"/>
+    <circle cx="70" cy="62" r="15" fill="#F2D9A0" stroke="#C9A55A" stroke-width="1.6"/><path d="M60 60c6-4 14-4 20 0" stroke="#E6C27A" stroke-width="1.4" fill="none"/>
+  </g>
+{% endif %}
+</svg>

@@ -1,0 +1,279 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{{ T.story_title }}{% endblock %}
+{% block description %}{{ T.st_intro }}{% endblock %}
+{% block head %}<link rel="stylesheet" href="{% static 'css/story.css' %}?v=10">{% endblock %}
+{% block content %}
+
+{# =================== 1. OPENING =================== #}
+<section class="sh" data-sh>
+  <span class="sh-dust" aria-hidden="true"></span>
+  <svg class="sh-leaf sh-leaf-1" viewBox="0 0 24 24" width="40" height="40" aria-hidden="true"><path d="M4 18C6 9 14 4 21 4c0 7-5 15-15 15z" fill="#5FAE3E"/><path d="M5 19 15 9" stroke="#F4C430" stroke-width="1.2" stroke-linecap="round"/></svg>
+  <svg class="sh-leaf sh-leaf-2" viewBox="0 0 24 24" width="30" height="30" aria-hidden="true"><path d="M4 18C6 9 14 4 21 4c0 7-5 15-15 15z" fill="#2E8B2E"/></svg>
+  <div class="wrap sh-inner">
+    <div class="sh-seal" aria-hidden="true">
+      <svg viewBox="0 0 200 200" width="200" height="200">
+        <defs>
+          <path id="shRing" d="M100 100 m-74 0 a74 74 0 1 1 148 0 a74 74 0 1 1 -148 0"/>
+          <linearGradient id="shGold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFE9A6"/><stop offset=".5" stop-color="#E4AE2A"/><stop offset="1" stop-color="#B07D12"/></linearGradient>
+        </defs>
+        <circle class="sh-seal-bg" cx="100" cy="100" r="94"/>
+        <circle class="sh-seal-line" cx="100" cy="100" r="88"/>
+        <circle class="sh-seal-line sh-seal-dash" cx="100" cy="100" r="58"/>
+        <g class="sh-seal-spin">
+          <text class="sh-seal-ring"><textPath href="#shRing" textLength="458" lengthAdjust="spacing">AJ வீட்டு சாப்பாடு ✦ {{ T.st_since }} ✦ AJ வீட்டு சாப்பாடு ✦ {{ T.st_since }} ✦</textPath></text>
+        </g>
+        <text class="sh-seal-small" x="100" y="86" text-anchor="middle">EST.</text>
+        <text class="sh-seal-year" x="100" y="120" text-anchor="middle">2026</text>
+      </svg>
+    </div>
+    <p class="st-eyebrow">✦ {{ T.story_title }}</p>
+    <h1 class="sh-title"><span class="sh-l1">{{ T.st_h1a }}</span> <span class="sh-l2">{{ T.st_h1b }}</span></h1>
+    <p class="lead sh-intro">{{ T.st_intro }}</p>
+    <div class="sh-cue" aria-hidden="true"><span class="sh-mouse"><i></i></span><span>{{ T.st_scroll }}</span></div>
+  </div>
+</section>
+
+{# =================== 2. THE STORY IN FOUR CHAPTERS (scroll) =================== #}
+<section class="sc" data-sc aria-label="{{ T.story_title }}">
+  <div class="sc-sticky">
+    <div class="wrap sc-grid">
+
+      <div class="sc-stage" aria-hidden="true">
+        <span class="sc-glow"></span>
+        <svg class="sc-svg" viewBox="0 0 400 400" width="400" height="400">
+          <defs>
+            <radialGradient id="scHalo"><stop offset="0" stop-color="#FFE9A6" stop-opacity=".9"/><stop offset=".55" stop-color="#F4C430" stop-opacity=".25"/><stop offset="1" stop-color="#F4C430" stop-opacity="0"/></radialGradient>
+            <linearGradient id="scGold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFE9A6"/><stop offset=".5" stop-color="#E4AE2A"/><stop offset="1" stop-color="#B07D12"/></linearGradient>
+            <linearGradient id="scBrass" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#9C6E12"/><stop offset=".3" stop-color="#E9B83A"/><stop offset=".55" stop-color="#FFE29A"/><stop offset=".8" stop-color="#D49B22"/><stop offset="1" stop-color="#8A5E0E"/></linearGradient>
+            <linearGradient id="scLeaf" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6CC24A"/><stop offset=".6" stop-color="#2E8B2E"/><stop offset="1" stop-color="#1D5E2A"/></linearGradient>
+            <linearGradient id="scRoof" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#D86A3A"/><stop offset="1" stop-color="#A84522"/></linearGradient>
+          </defs>
+          <ellipse class="sc-ground" cx="200" cy="338" rx="150" ry="13"/>
+
+          {# ---- scene 1: our home ---- #}
+          <g class="scn scn-1">
+            <g class="s1-sun"><circle cx="300" cy="104" r="30" fill="url(#scGold)"/>
+              <g class="s1-rays" stroke="#F4C430" stroke-width="3" stroke-linecap="round"><path d="M300 56v-12M300 164v-12M252 104h-12M360 104h-12M266 70l-8-8M342 146l-8-8M266 138l-8 8M342 62l-8 8"/></g></g>
+            <path class="s1-smoke" d="M255 132c-8-10 8-16 0-28s6-16 2-26"/>
+            <path class="s1-smoke s1-smoke-2" d="M268 128c-8-10 8-16 0-28s6-16 2-26"/>
+            <rect x="248" y="140" width="22" height="44" rx="3" fill="#A84522"/>
+            <rect class="s1-wall draw" x="118" y="198" width="164" height="132" rx="6" fill="#FFF6E0" stroke="#8A5A2B" stroke-width="3"/>
+            <path class="s1-roof draw" d="M96 206 200 126 304 206Z" fill="url(#scRoof)" stroke="#7A3518" stroke-width="3" stroke-linejoin="round"/>
+            <path d="M130 196h140M150 180h100M170 164h60" stroke="#7A3518" stroke-width="2" opacity=".45" stroke-linecap="round"/>
+            <rect class="s1-win" x="136" y="226" width="36" height="32" rx="4" fill="#F4C430" stroke="#8A5A2B" stroke-width="3"/>
+            <rect class="s1-win s1-win-2" x="228" y="226" width="36" height="32" rx="4" fill="#F4C430" stroke="#8A5A2B" stroke-width="3"/>
+            <path d="M154 226v32M136 242h36M246 226v32M228 242h36" stroke="#8A5A2B" stroke-width="2.4"/>
+            <path class="draw" d="M182 330v-48a18 18 0 0 1 36 0v48" fill="#1D5E2A" stroke="#0F3A18" stroke-width="3"/>
+            <circle cx="211" cy="306" r="2.6" fill="#F4C430"/>
+            <path d="M118 330h164" stroke="#8A5A2B" stroke-width="3"/>
+            <g class="s1-tag"><rect x="158" y="344" width="84" height="28" rx="14" fill="url(#scGold)"/><text x="200" y="363" text-anchor="middle">2026</text></g>
+          </g>
+
+          {# ---- scene 2: a table for everyone ---- #}
+          <g class="scn scn-2">
+            <circle class="s2-orbit" cx="200" cy="200" r="140"/>
+            <circle cx="200" cy="200" r="86" fill="#FFF6E0" stroke="url(#scGold)" stroke-width="4"/>
+            <path d="M136 230c18-62 82-104 132-96-10 60-70 104-132 96z" fill="url(#scLeaf)"/>
+            <path d="M140 228 262 138" stroke="#CFEABB" stroke-width="2.2" stroke-linecap="round" opacity=".8"/>
+            <ellipse cx="198" cy="190" rx="24" ry="15" fill="#FFFDF4"/><circle cx="192" cy="186" r="1.6" fill="#E9DFC4"/><circle cx="203" cy="192" r="1.6" fill="#E9DFC4"/>
+            <circle cx="232" cy="174" r="11" fill="#E98A15" stroke="#B5650C" stroke-width="2"/>
+            <circle cx="168" cy="214" r="10" fill="#7CB342" stroke="#4E7F22" stroke-width="2"/>
+            <circle cx="214" cy="216" r="10" fill="#FFFFFF" stroke="#D9D2BC" stroke-width="2"/>
+            <g class="s2-ring">
+              <g class="s2-chip" transform="translate(200 60)"><g class="s2-up"><circle r="25"/><path d="M-9 -2h18v12h-18zM-4 -2v-4h8v4" /></g></g>
+              <g class="s2-chip" transform="translate(340 200)"><g class="s2-up"><circle r="25"/><path d="M-11 -3 0 -9l11 6-11 6zM-6 0v6c3 3 9 3 12 0v-6"/></g></g>
+              <g class="s2-chip" transform="translate(200 340)"><g class="s2-up"><circle r="25"/><circle cx="-5" cy="-5" r="3.5"/><circle cx="6" cy="-4" r="3"/><path d="M-11 8c1-6 10-6 11 0M1 8c1-5 9-5 10 0"/></g></g>
+              <g class="s2-chip" transform="translate(60 200)"><g class="s2-up"><circle r="25"/><path d="M0 9-8 1a5 5 0 0 1 8-6 5 5 0 0 1 8 6z"/></g></g>
+            </g>
+          </g>
+
+          {# ---- scene 3: the biryani pot ---- #}
+          <g class="scn scn-3">
+            <g class="s3-flames"><path d="M170 344c-6-8 0-14 4-20 2 8 8 10 4 20z"/><path d="M196 346c-7-10 0-18 5-24 2 10 9 12 5 24z"/><path d="M224 344c-6-8 0-14 4-20 2 8 8 10 4 20z"/></g>
+            <path d="M104 220c-8 70 30 104 96 106 66-2 104-36 96-106z" fill="url(#scBrass)" stroke="#7A5410" stroke-width="3"/>
+            <path d="M112 262c56 20 120 20 176 0" stroke="#FFE9A6" stroke-width="3" fill="none" opacity=".7"/>
+            <path d="M118 286c52 18 112 18 164 0" stroke="#8A5E0E" stroke-width="2" fill="none" opacity=".5"/>
+            <ellipse cx="200" cy="220" rx="98" ry="17" fill="#C9961A" stroke="#7A5410" stroke-width="3"/>
+            <ellipse cx="200" cy="218" rx="86" ry="11" fill="#F6E3B4"/>
+            <g fill="#E98A15"><circle cx="170" cy="216" r="2.4"/><circle cx="196" cy="221" r="2.4"/><circle cx="226" cy="215" r="2.4"/><circle cx="250" cy="219" r="2"/></g>
+            <g fill="#4E9F2E"><ellipse cx="184" cy="214" rx="5" ry="2.4" transform="rotate(-20 184 214)"/><ellipse cx="238" cy="221" rx="5" ry="2.4" transform="rotate(25 238 221)"/></g>
+            <path class="s3-steam" d="M170 204c-8-10 6-16-1-28s5-14 1-24"/>
+            <path class="s3-steam s3-steam-2" d="M200 202c-8-10 6-16-1-28s5-14 1-24"/>
+            <path class="s3-steam s3-steam-3" d="M230 204c-8-10 6-16-1-28s5-14 1-24"/>
+            <g class="s3-lid">
+              <path d="M110 214c10-44 170-44 180 0z" fill="url(#scBrass)" stroke="#7A5410" stroke-width="3"/>
+              <ellipse cx="200" cy="214" rx="92" ry="9" fill="#B9861A" stroke="#7A5410" stroke-width="2.4"/>
+              <circle cx="200" cy="176" r="9" fill="url(#scGold)" stroke="#7A5410" stroke-width="2.4"/>
+            </g>
+            <g class="s3-spark"><path d="M96 150l3 8 8 3-8 3-3 8-3-8-8-3 8-3z"/><path d="M308 132l2.4 6 6 2.4-6 2.4-2.4 6-2.4-6-6-2.4 6-2.4z"/><path d="M322 236l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/></g>
+            <g class="s3-badge" transform="translate(316 86)"><circle r="30" fill="url(#scGold)" stroke="#8A5E0E" stroke-width="2"/><circle r="23" fill="none" stroke="#fff" stroke-width="1.4" stroke-dasharray="3 3"/><path d="M0 -12 3.6 -3.8 12.4 -3.6 5.4 1.8 7.8 10.4 0 5.4 -7.8 10.4 -5.4 1.8 -12.4 -3.6 -3.6 -3.8Z" fill="#fff"/></g>
+          </g>
+
+          {# ---- scene 4: our promise ---- #}
+          <g class="scn scn-4">
+            <path d="M58 262c40-110 210-170 300-140-30 110-190 180-300 140z" fill="url(#scLeaf)"/>
+            <path d="M66 260 348 128" stroke="#CFEABB" stroke-width="2.6" stroke-linecap="round" opacity=".8"/>
+            <path d="M120 236l-10-24M170 214l-12-28M220 190l-12-30M270 168l-10-28M140 226l18 20M190 202l20 22M240 180l20 22M290 158l18 18" stroke="#CFEABB" stroke-width="1.4" opacity=".55"/>
+            <ellipse cx="196" cy="208" rx="40" ry="22" fill="#FFFDF4"/><ellipse cx="190" cy="200" rx="16" ry="6" fill="#fff" opacity=".8"/>
+            <circle cx="262" cy="176" r="16" fill="#E98A15" stroke="#B5650C" stroke-width="2.4"/>
+            <circle cx="132" cy="232" r="15" fill="#7CB342" stroke="#4E7F22" stroke-width="2.4"/>
+            <circle cx="300" cy="160" r="13" fill="#C23B22" stroke="#8E2A16" stroke-width="2.4"/>
+            <circle cx="236" cy="230" r="20" fill="#F2D9A0" stroke="#C9A55A" stroke-width="2"/><g fill="#C9A55A"><circle cx="230" cy="226" r="1.6"/><circle cx="242" cy="232" r="1.6"/><circle cx="234" cy="238" r="1.6"/></g>
+            <g class="s4-hearts"><path d="M120 150c-4-6-14-2-10 6l10 9 10-9c4-8-6-12-10-6z"/><path d="M92 196c-3-4-10-1-7 4l7 6 7-6c3-5-4-8-7-4z"/></g>
+            <g class="s4-seal" transform="translate(300 92)">
+              <circle r="46" fill="url(#scGold)" stroke="#8A5E0E" stroke-width="2.4"/>
+              <circle class="s4-ring" r="37" fill="none" stroke="#fff" stroke-width="1.6" stroke-dasharray="4 4"/>
+              <path class="s4-tick" d="M-16 0 -4 12 18 -12" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+            </g>
+          </g>
+        </svg>
+      </div>
+
+      <div class="sc-copy">
+        <div class="sc-chs">
+          {% for n, t, d in story_chapters %}
+          <article class="sc-ch{% if forloop.first %} is-active{% endif %}" data-ch>
+            <span class="sc-big" aria-hidden="true">0{{ n }}</span>
+            <p class="sc-k">{{ T.st_chapter }} 0{{ n }}</p>
+            <h2 class="sc-t">{{ t }}</h2>
+            <p class="sc-d">{{ d }}</p>
+          </article>
+          {% endfor %}
+        </div>
+        <div class="sc-rail" aria-hidden="true"><span class="sc-rail-fill" data-sc-fill></span>{% for n, t, d in story_chapters %}<b data-sc-dot></b>{% endfor %}</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{# =================== 3. KITCHEN PROMISE =================== #}
+<section class="section pr">
+  <div class="wrap">
+    <p class="st-eyebrow center">✦ {{ T.st_pr_eyebrow }}</p>
+    <h2 class="center pr-title">{{ T.st_pr_t }}</h2>
+    <div class="pr-grid">
+      <article class="pr-card" data-reveal>
+        <span class="pr-n" aria-hidden="true">01</span>
+        <span class="pr-ic" aria-hidden="true"><svg viewBox="0 0 64 64" width="64" height="64"><circle class="pr-ring" cx="32" cy="32" r="30" pathLength="1"/>
+          <path d="M16 34h32a16 16 0 0 1-32 0z" fill="#E4F1D6" stroke="#1D5E2A" stroke-width="2.6" stroke-linejoin="round"/><path d="M14 34h36" stroke="#1D5E2A" stroke-width="2.6" stroke-linecap="round"/>
+          <path class="pr-steam" d="M26 26c-3-4 3-6 0-10M32 25c-3-4 3-6 0-10M38 26c-3-4 3-6 0-10" fill="none" stroke="#E98A15" stroke-width="2.4" stroke-linecap="round"/></svg></span>
+        <h3>{{ T.st_pr1_t }}</h3><p>{{ T.st_pr1_d }}</p>
+      </article>
+      <article class="pr-card" data-reveal>
+        <span class="pr-n" aria-hidden="true">02</span>
+        <span class="pr-ic" aria-hidden="true"><svg viewBox="0 0 64 64" width="64" height="64"><circle class="pr-ring" cx="32" cy="32" r="30" pathLength="1"/>
+          <path d="M27 14h10v6l4 6v22a3 3 0 0 1-3 3H26a3 3 0 0 1-3-3V26l4-6z" fill="#E4F1D6" stroke="#1D5E2A" stroke-width="2.6" stroke-linejoin="round"/><path d="M25 12h14" stroke="#1D5E2A" stroke-width="2.6" stroke-linecap="round"/>
+          <path class="pr-strike" d="M16 48 48 16" stroke="#C23B22" stroke-width="3.4" stroke-linecap="round" pathLength="1"/></svg></span>
+        <h3>{{ T.st_pr2_t }}</h3><p>{{ T.st_pr2_d }}</p>
+      </article>
+      <article class="pr-card" data-reveal>
+        <span class="pr-n" aria-hidden="true">03</span>
+        <span class="pr-ic" aria-hidden="true"><svg viewBox="0 0 64 64" width="64" height="64"><circle class="pr-ring" cx="32" cy="32" r="30" pathLength="1"/>
+          <path d="M16 34h32c0 10-7 16-16 16s-16-6-16-16z" fill="#E4F1D6" stroke="#1D5E2A" stroke-width="2.6" stroke-linejoin="round"/>
+          <g class="pr-pestle"><path d="M30 34 42 14" stroke="#8A5A2B" stroke-width="5" stroke-linecap="round"/></g>
+          <g fill="#E98A15"><circle cx="24" cy="31" r="1.8"/><circle cx="38" cy="31" r="1.8"/><circle cx="31" cy="30" r="1.4"/></g></svg></span>
+        <h3>{{ T.st_pr3_t }}</h3><p>{{ T.st_pr3_d }}</p>
+      </article>
+      <article class="pr-card" data-reveal>
+        <span class="pr-n" aria-hidden="true">04</span>
+        <span class="pr-ic" aria-hidden="true"><svg viewBox="0 0 64 64" width="64" height="64"><circle class="pr-ring" cx="32" cy="32" r="30" pathLength="1"/>
+          <g class="pr-fish"><path d="M14 30c6-8 18-10 28 0-10 10-22 8-28 0z" fill="#E4F1D6" stroke="#1D5E2A" stroke-width="2.6" stroke-linejoin="round"/><path d="M42 30l8-6v12z" fill="#E4F1D6" stroke="#1D5E2A" stroke-width="2.6" stroke-linejoin="round"/><circle cx="21" cy="28" r="1.8" fill="#1D5E2A"/></g>
+          <path class="pr-wave" d="M12 44c4-4 8-4 12 0s8 4 12 0 8-4 12 0" fill="none" stroke="#2E8B2E" stroke-width="2.4" stroke-linecap="round"/></svg></span>
+        <h3>{{ T.st_pr4_t }}</h3><p>{{ T.st_pr4_d }}</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+{# =================== 4. KITCHEN TO YOUR DOOR =================== #}
+<section class="jr" data-jr>
+  <div class="wrap">
+    <p class="st-eyebrow center st-eyebrow-light">✦ {{ T.st_j_eyebrow }}</p>
+    <h2 class="center jr-title">{{ T.st_j_t }}</h2>
+    <div class="jr-route">
+      <div class="jr-track" aria-hidden="true">
+        <span class="jr-fill" data-jr-fill></span>
+        <span class="jr-head" data-jr-head></span>
+        <span class="jr-bike" data-jr-bike>
+          <svg viewBox="0 0 96 60" width="96" height="60">
+            <defs>
+              <linearGradient id="jbGold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFEFB8"/><stop offset=".5" stop-color="#F4C430"/><stop offset="1" stop-color="#C08A16"/></linearGradient>
+              <linearGradient id="jbBody" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2E8B2E"/><stop offset="1" stop-color="#144A20"/></linearGradient>
+              <linearGradient id="jbBeam" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#FFF4C2" stop-opacity=".75"/><stop offset="1" stop-color="#FFF4C2" stop-opacity="0"/></linearGradient>
+            </defs>
+            <ellipse class="jb-shadow" cx="48" cy="57.6" rx="36" ry="2.4"/>
+            <g class="jb-speed"><path d="M-14 22h12M-18 30h10M-12 38h12"/></g>
+            <g class="jb-puffs"><circle cx="11" cy="46" r="3"/><circle cx="11" cy="46" r="2.4"/></g>
+            <g class="jb-lean">
+              <g class="jb-bob">
+                <path class="jb-beam" d="M79 14 96 7v19L79 18z"/>
+                <!-- delivery box on the rear rack -->
+                <rect x="3" y="15" width="25" height="21" rx="4" fill="url(#jbGold)" stroke="#8A5E0E" stroke-width="1.3"/>
+                <path d="M3 21h25" stroke="#8A5E0E" stroke-width="1.1" opacity=".55"/>
+                <path d="M10.5 32c1-5 4.6-7.6 9.4-7.6 0 4.8-3.8 7.6-9.4 7.6z" fill="#1D5E2A"/><path d="M11 31.5 17 26.6" stroke="#F4C430" stroke-width=".9" stroke-linecap="round"/>
+                <path d="M27 36h6" stroke="#8A5E0E" stroke-width="2" stroke-linecap="round"/>
+                <!-- rider -->
+                <path d="M45 33 52 35.5 55 43" fill="none" stroke="#0F2E16" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M39.5 32c-1.6-7 1.6-13 8-13.6 5-.4 8 3 7.4 8L53 32z" fill="#FFF1C9" stroke="#C9961A" stroke-width="1.2" stroke-linejoin="round"/>
+                <path d="M51 22.5 63 13.5" fill="none" stroke="#FFF1C9" stroke-width="3.6" stroke-linecap="round"/>
+                <path d="M51 22.5 63 13.5" fill="none" stroke="#C9961A" stroke-width=".8" stroke-linecap="round" opacity=".6"/>
+                <circle cx="49.5" cy="11.5" r="6.4" fill="url(#jbGold)" stroke="#8A5E0E" stroke-width="1.2"/>
+                <path d="M51 9.4h4.8c.8 0 1.4.7 1.2 1.5l-.6 2.4H51z" fill="#143F1D"/>
+                <!-- scooter body (vespa style) -->
+                <path d="M13 46c0-8 6-12.6 14-12.6h14.6c4.6 0 7.4 3 7.4 7.6V46z" fill="url(#jbBody)" stroke="url(#jbGold)" stroke-width="1.5" stroke-linejoin="round"/>
+                <path d="M19 38.6c2.4-2 5.2-2.8 8.6-2.8h9" fill="none" stroke="#6CC24A" stroke-width="1.3" stroke-linecap="round" opacity=".75"/>
+                <rect x="28" y="30.4" width="17" height="4.2" rx="2.1" fill="#0F2E16"/>
+                <rect x="47" y="43" width="16" height="3.4" rx="1.7" fill="#0F2E16" stroke="url(#jbGold)" stroke-width=".9"/>
+                <path d="M61 46.4 63.4 30c.8-6 3.6-10.4 8-12.4l2.6 1.4c-3.2 2.6-4.6 6.6-4.6 11.6 0 5.6 2.8 9.6 7.6 11.4l2 4.4z" fill="url(#jbBody)" stroke="url(#jbGold)" stroke-width="1.5" stroke-linejoin="round"/>
+                <path d="M65.6 44.6c1.6-6 5-8.6 9-8.6 4.6 0 7.8 3.2 8.8 8.4h-3.4c-.8-3-2.8-4.8-5.4-4.8-2.8 0-4.6 1.8-5.6 5z" fill="url(#jbGold)" stroke="#8A5E0E" stroke-width="1"/>
+                <path d="M71.6 18 72.6 10" stroke="url(#jbGold)" stroke-width="2.4" stroke-linecap="round"/>
+                <path d="M63 12.6 78 9.4" stroke="url(#jbGold)" stroke-width="2.4" stroke-linecap="round"/>
+                <circle class="jb-light" cx="77.4" cy="15.6" r="2.7"/>
+              </g>
+              <g class="jb-wheel" transform="translate(22 48.5)"><circle r="8.5"/><g class="jb-spokes" data-jb-spokes><path d="M0-6v12M-6 0h12M-4.2-4.2l8.4 8.4M4.2-4.2l-8.4 8.4"/></g><circle class="jb-hub" r="2.4"/></g>
+              <g class="jb-wheel" transform="translate(75 48.5)"><circle r="8.5"/><g class="jb-spokes" data-jb-spokes><path d="M0-6v12M-6 0h12M-4.2-4.2l8.4 8.4M4.2-4.2l-8.4 8.4"/></g><circle class="jb-hub" r="2.4"/></g>
+            </g>
+          </svg>
+        </span>
+      </div>
+      <ol class="jr-steps">
+        <li class="jr-step" data-jr-step>
+          <span class="jr-ic" aria-hidden="true"><svg viewBox="0 0 32 32" width="32" height="32"><rect x="9" y="3" width="14" height="26" rx="3"/><path d="M14 25h4"/><path class="jr-tap" d="M13 13l3 3 5-6"/></svg></span>
+          <span class="jr-n">01</span><h3>{{ T.st_j1_t }}</h3><p>{{ T.st_j1_d }}</p>
+        </li>
+        <li class="jr-step" data-jr-step>
+          <span class="jr-ic" aria-hidden="true"><svg viewBox="0 0 32 32" width="32" height="32"><path d="M6 16h20a10 10 0 0 1-20 0z"/><path d="M4 16h24"/><path class="jr-fire" d="M12 6c-2 3 2 4 0 7M17 5c-2 3 2 4 0 7M22 6c-2 3 2 4 0 7"/></svg></span>
+          <span class="jr-n">02</span><h3>{{ T.st_j2_t }}</h3><p>{{ T.st_j2_d }}</p>
+        </li>
+        <li class="jr-step" data-jr-step>
+          <span class="jr-ic" aria-hidden="true"><svg viewBox="0 0 32 32" width="32" height="32"><path d="M5 12h22v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2z"/><path d="M4 12l3-6h18l3 6"/><path d="M13 18h6"/></svg></span>
+          <span class="jr-n">03</span><h3>{{ T.st_j3_t }}</h3><p>{{ T.st_j3_d }}</p>
+        </li>
+        <li class="jr-step" data-jr-step>
+          <span class="jr-ic" aria-hidden="true"><svg viewBox="0 0 32 32" width="32" height="32"><path d="M5 15 16 6l11 9"/><path d="M8 13v14h16V13"/><path d="M13 27v-7h6v7"/></svg></span>
+          <span class="jr-n">04</span><h3>{{ T.st_j4_t }}</h3><p>{{ T.st_j4_d }}</p>
+        </li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+{# =================== 5. CLOSING =================== #}
+<section class="section se" data-reveal>
+  <div class="wrap se-inner">
+    <h2 class="se-title">{{ T.st_end_t }}</h2>
+    <svg class="se-swash" viewBox="0 0 320 30" width="320" height="30" aria-hidden="true"><path d="M8 18c60-14 110 8 160-2s100-14 144 0" pathLength="1"/></svg>
+    <p class="lead se-d">{{ T.st_end_d }} <span class="se-hours">{% if lang == "ta" %}{{ site.order_hours_ta }}{% else %}{{ site.order_hours_en }}{% endif %}</span></p>
+    <p class="se-sign">— {{ T.story_sign }}</p>
+    <div class="se-btns">
+      <a class="btn btn-primary btn-lg" href="{% url 'menu:menu' %}" data-magnetic>{{ T.order_now }}
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a class="btn btn-ghost btn-lg" href="{% url 'menu:menu' %}">{{ T.st_see_menu }}</a>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}<script src="{% static 'js/story.js' %}?v=7" defer></script>{% endblock %}

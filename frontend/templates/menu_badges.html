@@ -1,0 +1,6 @@
+{# veg mark + badges for one dish. Needs: dish, is_sunday #}
+<span class="vm{% if not dish.is_veg %} vm-nv{% endif %}" title="{% if dish.is_veg %}{{ T.veg }}{% else %}{{ T.nonveg }}{% endif %}"><i></i><span class="sr">{% if dish.is_veg %}{{ T.veg }}{% else %}{{ T.nonveg }}{% endif %}</span></span>
+{% if dish.badge == "bestseller" %}<span class="bd bd-best"><svg viewBox="0 0 24 24" width="11" height="11" aria-hidden="true"><path d="m12 2.8 2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.2l-5.7 3.1 1.2-6.4-4.7-4.4 6.4-.8z"/></svg>{{ T.b_bestseller }}</span>
+{% elif dish.badge == "chef" %}<span class="bd bd-chef"><svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><path d="M7 20h10v-5.3a4 4 0 0 0 1.6-7.6 4.6 4.6 0 0 0-8.5-1.5A4 4 0 0 0 5.4 12 4 4 0 0 0 7 14.7zM7 17h10"/></svg>{{ T.b_chef }}</span>
+{% elif dish.badge == "new" %}<span class="bd bd-new"><i aria-hidden="true"></i>{{ T.b_new }}</span>{% endif %}
+{% if dish.sunday_only and is_sunday %}<span class="bd bd-sun is-today"><svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.6M12 18.9v2.6M2.5 12h2.6M18.9 12h2.6M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8"/></svg>{{ T.b_today }}</span>{% endif %}

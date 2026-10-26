@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+{% load static ajvs %}
+{% block title %}{{ T.menu_title }}{% endblock %}
+{% block description %}{{ T.menu_sub }}{% endblock %}
+{% block head %}<link rel="stylesheet" href="{% static 'css/menu.css' %}?v=3">{% endblock %}
+{% block content %}
+{% include "art_defs.html" %}
+<div class="mn" data-mn>
+
+{# =================== HERO =================== #}
+<section class="mn-hero" data-mn-hero>
+  <div class="mn-dust" aria-hidden="true">
+    <i style="--x:8%;--d:0s;--s:1"></i><i style="--x:19%;--d:3.1s;--s:.7"></i><i style="--x:31%;--d:1.4s;--s:.9"></i>
+    <i style="--x:44%;--d:4.6s;--s:.6"></i><i style="--x:57%;--d:2.2s;--s:1"></i><i style="--x:69%;--d:5.3s;--s:.8"></i>
+    <i style="--x:81%;--d:.8s;--s:.7"></i><i style="--x:92%;--d:3.8s;--s:1"></i>
+  </div>
+  <div class="wrap mn-hero-in">
+    <p class="mn-orn"><span class="mn-orn-l" aria-hidden="true"></span><span class="mn-orn-t">✦ {{ T.mn_eyebrow }} ✦</span><span class="mn-orn-r" aria-hidden="true"></span></p>
+    <h1 class="mn-title"><span class="mn-tw"><span class="mn-t1">{{ T.mn_h1a }}</span></span> <span class="mn-tw"><span class="mn-t2">{{ T.mn_h1b }}</span></span></h1>
+    <p class="mn-sub">{{ T.mn_sub }} · {% if lang == "ta" %}{{ site.order_hours_ta }}{% else %}{{ site.order_hours_en }}{% endif %}</p>
+    {% if not site.kitchen_open %}
+      <p class="mn-note mn-note-closed"><span class="mn-pulse" aria-hidden="true"></span>{% if lang == "ta" %}{{ site.closed_message_ta }}{% else %}{{ site.closed_message_en }}{% endif %}</p>
+    {% elif has_sunday %}
+      <p class="mn-note{% if is_sunday %} is-today{% endif %}">{% if is_sunday %}{{ T.mn_sun_today }}{% else %}{{ T.mn_sun_note }}{% endif %}</p>
+    {% endif %}
+
+    {% if chapters %}
+    <div class="mn-tools">
+      <label class="mn-search">
+        <svg class="mn-search-ic" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>
+        <input type="search" data-mn-search placeholder="{{ T.mn_search }}" aria-label="{{ T.mn_search }}" autocomplete="off" enterkeyhint="search">
+        <button class="mn-clear" type="button" data-mn-clear aria-label="{{ T.mn_clear }}" hidden><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+      </label>
+      <div class="mn-diet" role="radiogroup" aria-label="{{ T.mn_diet }}" data-mn-diet>
+        <span class="mn-diet-ind" aria-hidden="true"></span>
+        <button type="button" role="radio" aria-checked="true" data-diet="all">{{ T.mn_all }}</button>
+        <button type="button" role="radio" aria-checked="false" data-diet="veg"><span class="vm" aria-hidden="true"><i></i></span>{{ T.veg }}</button>
+        <button type="button" role="radio" aria-checked="false" data-diet="nonveg"><span class="vm vm-nv" aria-hidden="true"><i></i></span>{{ T.nonveg }}</button>
+      </div>
+    </div>
+    <p class="sr" aria-live="polite" data-mn-live></p>
+    {% endif %}
+  </div>
+</section>
+
+{% if chapters %}
+{# =================== STICKY TABS =================== #}
+<nav class="mn-tabs" aria-label="{{ T.mn_tabs }}" data-mn-tabs>
+  <div class="mn-tabs-in" data-mn-tabs-in>
+    <span class="mn-tab-ind" aria-hidden="true"></span>
+    {% for ch in chapters %}<a class="mn-tab" href="#ch-{{ ch.cat.slug }}" data-tab="{{ ch.cat.slug }}">{% tr ch.cat 'name' %}</a>{% endfor %}
+  </div>
+</nav>
+
+{# =================== CHAPTERS =================== #}
+<div class="mn-body">
+  {% for row in rows %}
+  <div class="mn-row{% if row.duo %} is-duo{% endif %}">
+    {% for ch in row.chapters %}
+    <section class="mn-ch th-{{ ch.theme }}{% if ch.cat.is_combo %} is-combo{% endif %}{% if row.duo %} is-half{% endif %}" id="ch-{{ ch.cat.slug }}" data-ch="{{ ch.cat.slug }}" aria-labelledby="cht-{{ ch.cat.slug }}">
+      <header class="mn-ban{% if ch.cat.image %} has-photo{% endif %}" data-ban>
+        {% if ch.cat.image %}
+        <div class="mn-ban-photo" data-ban-art aria-hidden="true"><img src="{{ ch.cat.image.url }}" alt="" width="1600" height="900" decoding="async" loading="{% if forloop.parentloop.first %}eager{% else %}lazy{% endif %}"></div>
+        <span class="mn-ban-shade" aria-hidden="true"></span>
+        {% endif %}
+        <span class="mn-ban-glow" aria-hidden="true"></span>
+        <span class="mn-ban-num" aria-hidden="true">{{ ch.num }}</span>
+        <div class="mn-ban-tx">
+          <p class="mn-ban-k"><span>{{ T.mn_chapter }} {{ ch.num }}</span></p>
+          <h2 class="mn-ban-t" id="cht-{{ ch.cat.slug }}">{% tr ch.cat 'name' %}</h2>
+          <p class="mn-ban-l">{% if ch.cat.tagline_en or ch.cat.tagline_ta %}{% tr ch.cat 'tagline' %}{% else %}{{ ch.dishes|length }} {% if ch.dishes|length == 1 %}{{ T.mn_dish }}{% else %}{{ T.mn_dishes }}{% endif %}{% endif %}</p>
+        </div>
+        {% if not ch.cat.image %}<div class="mn-ban-art" data-ban-art><div class="mn-ban-art-in">{% include "dish_art.html" with art=ch.cat.art_key %}</div></div>{% endif %}
+        <span class="mn-ban-sheen" aria-hidden="true"></span>
+      </header>
+
+      {% if ch.cat.is_combo %}
+      <div class="mn-combos">
+        {% for dish in ch.dishes %}
+        <article class="mn-it mn-cb{% if not dish.is_available %} is-sold{% elif dish.sunday_only and not is_sunday %} is-locked{% endif %}{% if forloop.last and forloop.counter > 1 and not forloop.counter|divisibleby:2 %} is-wide{% endif %}" data-dish="{{ dish.id }}" data-veg="{% if dish.is_veg %}1{% else %}0{% endif %}"
+          data-q="{{ dish.name_en|lower }} {{ dish.name_ta }} {{ dish.description_en|lower }} {{ dish.description_ta }} {{ ch.cat.name_en|lower }} {{ ch.cat.name_ta }}" style="--i:{{ forloop.counter0 }}">
+          <span class="mn-cb-sheen" aria-hidden="true"></span>
+          <button class="mn-th{% if dish.image %} has-img{% endif %}" type="button" data-open aria-label="{{ T.mn_view }}: {% tr dish 'name' %}">
+            {% if dish.image %}<img src="{{ dish.image.url }}" alt="" loading="lazy" decoding="async" width="240" height="180">{% else %}{% include "dish_art.html" with art=dish.art_key %}{% endif %}
+          </button>
+          <div class="mn-cb-b">
+            <p class="mn-cb-k">{{ T.mn_combo }}{% if dish.save_amount %} · <span class="mn-save">{{ T.mn_save }} ₹{{ dish.save_amount|rupees }}</span>{% endif %}</p>
+            <h3 class="mn-nm"><button type="button" data-open>{% tr dish 'name' %}</button></h3>
+            {% if dish.description_en or dish.description_ta %}<p class="mn-ds">{% tr dish 'description' %}</p>{% endif %}
+            <div class="mn-ft">{% include "menu_badges.html" %}</div>
+          </div>
+          <div class="mn-cb-end">
+            <p class="mn-pr">{% if dish.save_amount %}<s>₹{{ dish.compare_price|rupees }}</s>{% endif %}<span data-count="{{ dish.price }}">₹{{ dish.price|rupees }}</span></p>
+            {% include "menu_ctl.html" %}
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="mn-list">
+        {% for dish in ch.dishes %}
+        <article class="mn-it{% if not dish.is_available %} is-sold{% elif dish.sunday_only and not is_sunday %} is-locked{% endif %}{% if forloop.last and not forloop.counter|divisibleby:2 %} is-wide{% endif %}" data-dish="{{ dish.id }}" data-veg="{% if dish.is_veg %}1{% else %}0{% endif %}"
+          data-q="{{ dish.name_en|lower }} {{ dish.name_ta }} {{ dish.description_en|lower }} {{ dish.description_ta }} {{ ch.cat.name_en|lower }} {{ ch.cat.name_ta }}" style="--i:{{ forloop.counter0 }}">
+          <button class="mn-th{% if dish.image %} has-img{% endif %}" type="button" data-open aria-label="{{ T.mn_view }}: {% tr dish 'name' %}">
+            {% if dish.image %}<img src="{{ dish.image.url }}" alt="" loading="lazy" decoding="async" width="160" height="160">{% else %}{% include "dish_art.html" with art=dish.art_key %}{% endif %}
+          </button>
+          <div class="mn-it-b">
+            <div class="mn-r1">
+              <h3 class="mn-nm"><button type="button" data-open>{% tr dish 'name' %}</button></h3>
+              <span class="mn-dots" aria-hidden="true"></span>
+              <p class="mn-pr"><span data-count="{{ dish.price }}">₹{{ dish.price|rupees }}</span></p>
+            </div>
+            {% if dish.description_en or dish.description_ta %}<p class="mn-ds">{% tr dish 'description' %}</p>{% endif %}
+            <div class="mn-ft">{% include "menu_badges.html" %}{% include "menu_ctl.html" %}</div>
+          </div>
+        </article>
+        {% endfor %}
+        {% if row.duo %}<div class="mn-fill" aria-hidden="true" data-fill>{% if ch.cat.image %}<div class="mn-fill-photo"><img src="{{ ch.cat.image.url }}" alt="" loading="lazy" decoding="async"></div>{% else %}<div class="mn-fill-art">{% include "dish_art.html" with art=ch.cat.art_key %}</div>{% endif %}<span class="mn-fill-orn"><i></i></span></div>{% endif %}
+      </div>
+      {% endif %}
+    </section>
+    {% endfor %}
+  </div>
+  {% endfor %}
+
+  <div class="mn-none" data-mn-none hidden>
+    <div class="mn-none-art" aria-hidden="true">{% include "dish_art.html" with art="meal" %}</div>
+    <h2 class="mn-none-t">{{ T.mn_none_t }}</h2>
+    <p>{{ T.mn_none_d }}</p>
+    <button class="btn btn-primary" type="button" data-mn-reset>{{ T.mn_reset }}</button>
+  </div>
+</div>
+
+{# =================== PHONE CART BAR =================== #}
+<button class="mn-bar" type="button" data-mn-bar data-cart-open aria-label="{{ T.mn_view_cart }}" tabindex="-1">
+  <span class="mn-bar-sheen" aria-hidden="true"></span>
+  <span class="mn-bar-ic" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg><b data-cart-count>0</b></span>
+  <span class="mn-bar-tx"><span class="mn-bar-c" data-mn-bar-c></span><span class="mn-bar-s" data-cart-subtotal>₹0</span></span>
+  <span class="mn-bar-go">{{ T.mn_view_cart }}<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+</button>
+
+{# =================== DISH DETAIL =================== #}
+<div class="mn-dlg" data-mn-dlg hidden>
+  <div class="mn-dlg-bg" data-dlg-close></div>
+  <div class="mn-dlg-card" role="dialog" aria-modal="true" aria-labelledby="mn-dlg-t" tabindex="-1" data-dlg-card>
+    <span class="mn-dlg-grab" aria-hidden="true" data-dlg-grab></span>
+    <div class="mn-dlg-stage" data-dlg-stage>
+      <span class="mn-dlg-glow" aria-hidden="true"></span>
+      <span class="mn-dlg-spark" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span>
+      <div class="mn-dlg-art" data-dlg-art></div>
+      <p class="mn-dlg-k" data-dlg-k></p>
+    </div>
+    <div class="mn-dlg-b" data-dlg-b>
+      <div class="mn-ft mn-dlg-tags" data-dlg-tags></div>
+      <h2 class="mn-dlg-t" id="mn-dlg-t" data-dlg-t></h2>
+      <p class="mn-dlg-alt" data-dlg-alt></p>
+      <p class="mn-dlg-ds" data-dlg-ds></p>
+      <div class="mn-dlg-inc" data-dlg-inc hidden><h3>{{ T.mn_includes }}</h3><ul data-dlg-list></ul></div>
+      <div class="mn-dlg-spice" data-dlg-spice hidden><span>{{ T.mn_spice }}</span><span class="mn-chilis" data-dlg-chili></span><b data-dlg-spice-t></b></div>
+      <div class="mn-dlg-ft"><p class="mn-pr mn-dlg-pr" data-dlg-pr></p><div data-dlg-ctl></div></div>
+    </div>
+    <button class="mn-dlg-x" type="button" data-dlg-close aria-label="{{ T.mn_close }}"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    <button class="mn-dlg-nav mn-dlg-prev" type="button" data-dlg-prev aria-label="{{ T.mn_prev }}"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="m15 5-7 7 7 7"/></svg></button>
+    <button class="mn-dlg-nav mn-dlg-next" type="button" data-dlg-next aria-label="{{ T.mn_next }}"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></button>
+  </div>
+</div>
+{{ dish_info|json_script:"mn-info" }}
+<script id="mn-i18n" type="application/json">{"item":"{{ T.mn_item|escapejs }}","items":"{{ T.mn_items|escapejs }}","found":"{{ T.mn_found|escapejs }}","spice":["","{{ T.spice_1|escapejs }}","{{ T.spice_2|escapejs }}","{{ T.spice_3|escapejs }}"]}</script>
+
+{% else %}
+<section class="mn-body"><div class="mn-none" style="display:block"><div class="mn-none-art" aria-hidden="true">{% include "dish_art.html" with art="meal" %}</div><p class="mn-none-t">{{ T.no_dishes }}</p></div></section>
+{% endif %}
+</div>
+{% endblock %}
+{% block scripts %}<script src="{% static 'js/menu.js' %}?v=2" defer></script>{% endblock %}

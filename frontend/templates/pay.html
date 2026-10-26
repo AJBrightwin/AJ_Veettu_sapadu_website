@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load static ajvs %}
+{% block title %}{{ T.pay_h1 }}{% endblock %}
+{% block head %}<link rel="stylesheet" href="{% static 'css/orders.css' %}?v=1">{% endblock %}
+{% block content %}
+<section class="od">
+  <div class="od-wrap">
+    <p class="od-kicker"><span></span>✦ {{ T.pay_h1 }} ✦<span></span></p>
+    <h1 class="od-title">{{ T.pay_btn }} <em>₹{{ order.total|rupees }}</em></h1>
+    <p class="od-no">{{ T.order_no }} <b>{{ order.order_number }}</b></p>
+
+    {% include "_order_card.html" %}
+
+    {% if demo %}
+    <form method="post" action="{% url 'orders:verify' order.token %}" class="od-demo">
+      {% csrf_token %}<input type="hidden" name="demo" value="1">
+      <p>{{ T.pay_demo }}</p>
+      <button class="od-btn" type="submit" data-demo-pay><span class="od-lock" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span>{{ T.pay_demo_btn }}<i class="od-sheen"></i></button>
+    </form>
+    {% else %}
+    <button id="rzp-pay" class="od-btn" type="button"><span class="od-lock" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span>{{ T.pay_btn }} ₹{{ order.total|rupees }}<i class="od-sheen"></i></button>
+    <p class="od-fine">{{ T.pay_opening }}</p>
+    <form id="rzp-verify" method="post" action="{% url 'orders:verify' order.token %}" hidden>
+      {% csrf_token %}
+      <input type="hidden" name="razorpay_payment_id"><input type="hidden" name="razorpay_order_id"><input type="hidden" name="razorpay_signature">
+    </form>
+    {% endif %}
+    <p class="od-secure"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg>{{ T.co_secure }}</p>
+    <p class="od-methods">{{ T.co_methods }}</p>
+  </div>
+</section>
+{% if not demo %}
+<script id="rzp-options" type="application/json">{
+  "key": "{{ razorpay_key_id|escapejs }}",
+  "order_id": "{{ order.razorpay_order_id|escapejs }}",
+  "amount": {{ order.amount_paise }},
+  "currency": "INR",
+  "name": "{{ T.brand|escapejs }}",
+  "description": "{{ order.order_number|escapejs }}",
+  "prefill": {"name": "{{ order.customer_name|escapejs }}", "contact": "+91{{ order.phone|escapejs }}", "email": "{{ order.email|escapejs }}"},
+  "theme": {"color": "#1D5E2A"}
+}</script>
+{% endif %}
+{% endblock %}
+{% block scripts %}
+{% if not demo %}
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+(function () {
+  var opts = JSON.parse(document.getElementById("rzp-options").textContent);
+  var form = document.getElementById("rzp-verify");
+  opts.handler = function (r) {
+    form.razorpay_payment_id.value = r.razorpay_payment_id;
+    form.razorpay_order_id.value = r.razorpay_order_id;
+    form.razorpay_signature.value = r.razorpay_signature;
+    form.submit();
+  };
+  function open() { if (window.Razorpay) new Razorpay(opts).open(); }
+  document.getElementById("rzp-pay").addEventListener("click", open);
+  setTimeout(open, 600);
+})();
+</script>
+{% endif %}
+{% endblock %}

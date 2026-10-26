@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{{ T.fl_title }}{% endblock %}
+{% block head %}<link rel="stylesheet" href="{% static 'css/orders.css' %}?v=1">{% endblock %}
+{% block content %}
+<section class="od od-fail">
+  <div class="od-wrap">
+    <div class="od-seal od-seal-warn" aria-hidden="true"><svg viewBox="0 0 52 52"><path d="M26 15v14M26 36.5v.5"/></svg></div>
+    <h1 class="od-title"><em>{{ T.fl_title }}</em></h1>
+    <p class="od-sub">{{ T.fl_sub }}</p>
+    <div class="od-no-box"><span>{{ T.order_no }}</span><b>{{ order.order_number }}</b></div>
+    <div class="od-actions">
+      <a class="od-btn" href="{% url 'orders:pay' order.token %}">{{ T.fl_retry }}<i class="od-sheen"></i></a>
+      <a class="od-ghost" href="{% url 'orders:checkout' %}">{{ T.checkout_title }}</a>
+    </div>
+    <div class="od-help">
+      <p>{{ T.questions }}</p>
+      <div>
+        {% if site.whatsapp %}<a class="od-chip" href="https://wa.me/{{ site.whatsapp }}?text={{ order.order_number|urlencode }}" target="_blank" rel="noopener">{{ T.whatsapp }}</a>{% endif %}
+        {% if site.phone %}<a class="od-chip" href="tel:{{ site.phone|cut:' ' }}">{{ T.sc_call }} · {{ site.phone }}</a>{% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

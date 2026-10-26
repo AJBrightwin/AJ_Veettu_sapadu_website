@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<section class="page-head">
+  <div class="wrap">
+    <h1>{{ title }}</h1>
+    {% if updated %}<p class="small policy-date">{{ T.pol_updated }}: {{ updated|date:"d M Y" }}</p>{% endif %}
+  </div>
+</section>
+<section class="section">
+  <div class="wrap">
+    {% if body %}
+    <article class="policy-body">{{ body|linebreaks }}</article>
+    {% else %}
+    <div class="policy-soon" data-reveal>
+      <span class="policy-soon-ic" aria-hidden="true">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h5"/></svg>
+      </span>
+      <p class="policy-soon-t">{{ T.pol_updating }}</p>
+      <p>{{ T.pol_updating_d }}</p>
+      {% if site.phone %}<a class="btn btn-primary" href="tel:{{ site.phone|cut:' ' }}">{{ T.call }} · {{ site.phone }}</a>{% endif %}
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

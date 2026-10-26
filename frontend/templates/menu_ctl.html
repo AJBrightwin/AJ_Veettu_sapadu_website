@@ -1,0 +1,21 @@
+{% load ajvs %}{# Add button / quantity stepper for one dish (menu page). Needs: dish, site, is_sunday #}
+<div class="mc">
+{% if not dish.is_available %}
+  <span class="mc-off mc-sold">{{ T.sold_out }}</span>
+{% elif dish.sunday_only and not is_sunday %}
+  <span class="mc-off mc-sun"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.6M12 18.9v2.6M2.5 12h2.6M18.9 12h2.6M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8"/></svg>{{ T.mn_sun_lock }}</span>
+{% else %}
+  <div class="mc-step" data-step data-id="{{ dish.id }}" data-price="{{ dish.price }}"
+       data-name-en="{{ dish.name_en }}" data-name-ta="{{ dish.name_ta|default:dish.name_en }}"{% if not site.kitchen_open %} data-closed{% endif %}>
+    <button class="mc-add" type="button" data-inc{% if not site.kitchen_open %} disabled{% endif %}>
+      <span class="mc-add-fill" aria-hidden="true"></span>
+      <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span class="mc-add-t">{{ T.add }}</span>
+    </button>
+    <div class="mc-qty" role="group" aria-label="{{ T.mn_qty }}">
+      <button type="button" data-dec aria-label="{{ T.mn_remove_one }}"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M5 12h14"/></svg></button>
+      <b class="mc-n" data-n aria-live="polite">0</b>
+      <button type="button" data-inc aria-label="{{ T.mn_add_one }}"{% if not site.kitchen_open %} disabled{% endif %}><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
+    </div>
+  </div>
+{% endif %}
+</div>

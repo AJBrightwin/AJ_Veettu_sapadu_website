@@ -1,0 +1,4 @@
+# Extra packages for the Linux VPS (MySQL + Gunicorn)
+-r requirements.txt
+mysqlclient>=2.2
+gunicorn>=22.0

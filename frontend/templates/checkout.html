@@ -1,0 +1,273 @@
+{% extends "base.html" %}
+{% load static ajvs %}
+{% block title %}{{ T.checkout_title }}{% endblock %}
+{% block head %}
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<link rel="stylesheet" href="{% static 'vendor/leaflet/leaflet.css' %}?v=1.9.4">
+<link rel="stylesheet" href="{% static 'css/checkout.css' %}?v=4">
+{% endblock %}
+{% block content %}
+<div class="co" data-co>
+
+  {# =================== HEAD + STEPS =================== #}
+  <header class="co-head">
+    <div class="co-wrap">
+      <p class="co-kicker"><span class="co-orn-l"></span>✦ {{ T.co_kicker }} ✦<span class="co-orn-r"></span></p>
+      <h1 class="co-title"><span class="co-tw"><span>{{ T.co_h1a }}</span></span> <span class="co-tw"><em>{{ T.co_h1b }}</em></span></h1>
+      <ol class="co-steps" data-co-steps>
+        <li class="is-on" data-goto="1"><b>1</b><span>{{ T.co_s1 }}</span></li>
+        <li data-goto="2"><b>2</b><span data-s2-label>{{ T.co_s2 }}</span></li>
+        <li data-goto="3"><b>3</b><span>{{ T.co_s3 }}</span></li>
+        <i class="co-steps-bar" aria-hidden="true"><i data-co-bar></i></i>
+      </ol>
+    </div>
+  </header>
+
+  <div class="co-wrap co-grid">
+    <form class="co-main" data-co-form novalidate autocomplete="on">
+      {% csrf_token %}
+
+      <p class="co-alert" data-co-alert role="alert" hidden></p>
+
+      {# ---------- STEP 1: how & when ---------- #}
+      <section class="co-card co-step is-active" data-step="1" aria-labelledby="co-h-1">
+        <p class="co-step-k" aria-hidden="true">{{ T.co_s1 }}</p>
+        <h2 id="co-h-1" class="co-h2"><span class="co-num">1</span>{{ T.co_how }}</h2>
+        <div class="co-opts co-opts-2" role="radiogroup" aria-label="{{ T.co_how }}">
+          <label class="co-opt">
+            <input type="radio" name="fulfilment" value="delivery" checked>
+            <span class="co-opt-in">
+              <span class="co-opt-ic" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M4 21h3m18 0h3M9 21a3 3 0 1 0 6 0 3 3 0 1 0-6 0m11 0a3 3 0 1 0 6 0 3 3 0 1 0-6 0M15 21h5M7 21V12h9l3 5h6l1 4"/><path d="M10 12V9h5"/></svg></span>
+              <span class="co-opt-t"><b>{{ T.co_delivery }}</b><small>{{ T.co_delivery_d }}</small></span>
+              <span class="co-opt-p">₹{{ site.delivery_charge|rupees }}</span>
+            </span>
+          </label>
+          <label class="co-opt">
+            <input type="radio" name="fulfilment" value="pickup">
+            <span class="co-opt-in">
+              <span class="co-opt-ic" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M6 13 8 6h16l2 7M6 13h20v12H6zM6 13c0 2 1.5 3 3.3 3S12.7 15 12.7 13c0 2 1.5 3 3.3 3s3.3-1 3.3-3c0 2 1.5 3 3.3 3S26 15 26 13M13 25v-5h6v5"/></svg></span>
+              <span class="co-opt-t"><b>{{ T.co_pickup }}</b><small>{{ T.co_pickup_d }}</small></span>
+              <span class="co-opt-p co-free">{{ T.free }}</span>
+            </span>
+          </label>
+        </div>
+
+        <h3 class="co-h3">{{ T.co_when }}</h3>
+        {% if not st.same_day_open %}
+        <p class="co-note co-note-time"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+          <span>{% if not site.kitchen_open %}{% if lang == "ta" %}{{ site.closed_message_ta }}{% else %}{{ site.closed_message_en }}{% endif %}{% else %}{{ closed_msg }}{% endif %}</span></p>
+        {% endif %}
+        <div class="co-opts co-opts-2" role="radiogroup" aria-label="{{ T.co_when }}">
+          <label class="co-opt{% if not st.same_day_open %} is-off{% endif %}">
+            <input type="radio" name="when" value="now" {% if st.same_day_open %}checked{% else %}disabled{% endif %}>
+            <span class="co-opt-in">
+              <span class="co-opt-ic" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M17 4 8 18h7l-2 10 11-15h-8z"/></svg></span>
+              <span class="co-opt-t"><b>{{ T.co_now }}</b><small>{% if st.same_day_open %}{{ T.co_now_d }}{% else %}<span data-hours>{{ open_label }} – {{ close_label }}</span>{% endif %}</small></span>
+            </span>
+          </label>
+          <label class="co-opt">
+            <input type="radio" name="when" value="later" {% if not st.same_day_open %}checked{% endif %}>
+            <span class="co-opt-in">
+              <span class="co-opt-ic" aria-hidden="true"><svg viewBox="0 0 32 32"><rect x="5" y="7" width="22" height="20" rx="3"/><path d="M5 13h22M11 4v6M21 4v6M10 18h3m3 0h3m3 0h0M10 22h3m3 0h3"/></svg></span>
+              <span class="co-opt-t"><b>{{ T.co_later }}</b><small data-later-d>{{ T.co_later_d }}</small></span>
+            </span>
+          </label>
+        </div>
+
+        <div class="co-later" data-later {% if st.same_day_open %}hidden{% endif %}>
+          <p class="co-label">{{ T.co_pick_day }}</p>
+          <div class="co-chips co-days" data-days role="radiogroup" aria-label="{{ T.co_pick_day }}"></div>
+          <p class="co-err" data-err="date" hidden></p>
+          <p class="co-label">{{ T.co_pick_time }}</p>
+          <div class="co-chips co-slots" role="radiogroup" aria-label="{{ T.co_pick_time }}">
+            {% for value, label in slots %}
+            <label class="co-chip"><input type="radio" name="slot" value="{{ value }}"><span>{{ label }}</span></label>
+            {% endfor %}
+          </div>
+          <p class="co-err" data-err="slot" hidden></p>
+          <p class="co-fine">{{ T.co_cancel_note }}</p>
+        </div>
+      </section>
+
+      {# ---------- STEP 2: address / details ---------- #}
+      <section class="co-card co-step" data-step="2" aria-labelledby="co-h-2">
+        <p class="co-step-k" aria-hidden="true" data-s2-label>{{ T.co_s2 }}</p>
+
+        <div data-for="delivery">
+          <h2 id="co-h-2" class="co-h2"><span class="co-num">2</span>{{ T.co_where }}</h2>
+          <div class="co-addrs" data-addrs role="radiogroup" aria-label="{{ T.co_where }}"></div>
+          <button class="co-add" type="button" data-addr-new>
+            <span class="co-add-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span>
+            <span class="co-add-t"><b data-add-title>{{ T.co_add_addr }}</b><small data-add-sub>{{ T.co_add_first_d }}</small></span>
+            <svg class="co-add-go" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>
+          </button>
+          <p class="co-err" data-err="addr" hidden></p>
+          <p class="co-privacy"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>{{ T.co_privacy }} · <button type="button" class="co-link" data-forget>{{ T.co_forget }}</button></p>
+        </div>
+
+        <div data-for="pickup" hidden>
+          <h2 class="co-h2"><span class="co-num">2</span>{{ T.co_s2p }}</h2>
+          <div class="co-pickup">
+            <span class="co-pickup-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/></svg></span>
+            <div><small>{{ T.co_pickup_from }}</small><b>{{ T.brand }}</b><span>Nigilesan Nagar, Tuticorin</span></div>
+            <a class="co-link" href="https://www.google.com/maps/search/?api=1&query={{ site.kitchen_lat }},{{ site.kitchen_lng }}" target="_blank" rel="noopener">{{ T.co_directions }} ↗</a>
+          </div>
+          <div class="co-fields co-fields-2">
+            <div class="co-field"><input id="co-p-name" name="p_name" autocomplete="name" maxlength="100" placeholder=" " data-contact="name"><label for="co-p-name">{{ T.your_name }}</label><p class="co-err" data-err="name" hidden></p></div>
+            <div class="co-field"><input id="co-p-phone" name="p_phone" type="tel" inputmode="numeric" autocomplete="tel-national" maxlength="10" placeholder=" " data-contact="phone"><label for="co-p-phone">{{ T.phone }}</label><p class="co-err" data-err="phone" hidden></p></div>
+          </div>
+        </div>
+      </section>
+
+      {# ---------- STEP 3: review ---------- #}
+      <section class="co-card co-step" data-step="3" aria-labelledby="co-h-3">
+        <p class="co-step-k" aria-hidden="true">{{ T.co_s3 }}</p>
+        <h2 id="co-h-3" class="co-h2"><span class="co-num">3</span>{{ T.co_review }}</h2>
+        <div class="co-items" data-items></div>
+        <div class="co-empty" data-empty hidden>
+          <p>{{ T.cd_empty_t }}</p><a class="co-btn-gold" href="{% url 'menu:menu' %}">{{ T.cd_browse }}</a>
+        </div>
+
+        <div class="co-field co-field-area">
+          <textarea id="co-notes" name="notes" rows="2" maxlength="300" placeholder=" "></textarea>
+          <label for="co-notes">{{ T.notes }} · <i>{{ T.notes_ph }}</i></label>
+        </div>
+
+        <label class="co-switch">
+          <input type="checkbox" name="no_cutlery" value="1">
+          <span class="co-switch-ui" aria-hidden="true"><i></i></span>
+          <span class="co-switch-t"><b>{{ T.co_cutlery }}</b><small>{{ T.co_cutlery_d }}</small></span>
+          <span class="co-switch-leaf" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 19C6 9 13 5 20 4c-.5 9-6 15-15 15z"/><path d="M5 19 14 10"/></svg></span>
+        </label>
+
+        {% if has_coupons %}
+        <div class="co-coupon" data-coupon>
+          <p class="co-label">{{ T.co_coupon }}</p>
+          <div class="co-coupon-row" data-coupon-form>
+            <svg class="co-coupon-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9V6a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v3a3 3 0 0 0 0 6v3a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-3a3 3 0 0 0 0-6zM9 5v14" stroke-dasharray="2 2.5"/></svg>
+            <input name="coupon_input" placeholder="{{ T.co_coupon_ph }}" maxlength="30" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="{{ T.co_coupon_ph }}">
+            <button type="button" data-coupon-apply>{{ T.co_apply }}</button>
+          </div>
+          <div class="co-coupon-ok" data-coupon-ok hidden>
+            <span class="co-coupon-tick" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span>
+            <span><b data-coupon-code></b><small data-coupon-msg></small></span>
+            <button type="button" class="co-link" data-coupon-remove>{{ T.remove }}</button>
+          </div>
+          <p class="co-err" data-err="coupon" hidden></p>
+        </div>
+        {% endif %}
+      </section>
+
+      {# phone: step buttons #}
+      <div class="co-nav" data-co-nav>
+        <button type="button" class="co-nav-back" data-prev aria-label="{{ T.cd_back }}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+        <button type="button" class="co-nav-go" data-next>
+          <span class="co-nav-amt"><small>{{ T.cd_to_pay }}</small><b data-total>₹0</b></span>
+          <span class="co-nav-t"><span data-next-label>{{ T.co_continue }}</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+          <i class="co-sheen" aria-hidden="true"></i>
+        </button>
+      </div>
+    </form>
+
+    {# =================== SUMMARY (sticky on computers) =================== #}
+    <aside class="co-sum" aria-label="{{ T.order_summary }}">
+      <div class="co-sum-card">
+        <h2 class="co-sum-h">{{ T.order_summary }}</h2>
+        <div class="co-sum-when" data-sum-when></div>
+        <div class="co-sum-items" data-sum-items></div>
+        <div class="co-bill">
+          <div class="co-bill-row"><span>{{ T.cd_item_total }}</span><b data-co-sub>₹0</b></div>
+          <div class="co-bill-row" data-fee-row><span>{{ T.co_fee }}</span><b data-fee>₹0</b></div>
+          <div class="co-bill-row co-bill-disc" data-disc-row hidden><span>{{ T.co_discount }} <em data-disc-code></em></span><b data-disc>−₹0</b></div>
+          <div class="co-bill-row co-bill-total"><span>{{ T.cd_to_pay }}</span><b data-total>₹0</b></div>
+        </div>
+        <div class="co-min" data-min hidden><span data-min-t></span><i class="co-min-bar"><i data-min-bar></i></i></div>
+        <button type="button" class="co-pay" data-pay>
+          <span class="co-pay-lock" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span>
+          <span data-pay-label>{{ T.co_pay }}</span>
+          <i class="co-sheen" aria-hidden="true"></i>
+        </button>
+        <p class="co-secure"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg>{{ T.co_secure }}</p>
+        <p class="co-methods">{{ T.co_methods }}</p>
+      </div>
+    </aside>
+  </div>
+
+  {# =================== ADDRESS SHEET =================== #}
+  <div class="co-sheet" data-sheet hidden>
+    <div class="co-sheet-bg" data-sheet-close></div>
+    <div class="co-sheet-card" role="dialog" aria-modal="true" aria-labelledby="co-sheet-t" tabindex="-1">
+      <header class="co-sheet-head">
+        <button type="button" class="co-sheet-x" data-sheet-close aria-label="{{ T.mn_close }}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+        <h2 id="co-sheet-t" data-sheet-title>{{ T.co_addr_title }}</h2>
+      </header>
+      <div class="co-sheet-body">
+        <div class="co-search" data-search hidden>
+          <div class="co-search-box" data-search-box></div>
+        </div>
+        <div class="co-map-wrap">
+          <div class="co-map" data-map aria-label="{{ T.co_pin_hint }}"></div>
+          <div class="co-pin" aria-hidden="true"><span class="co-pin-tip">{{ T.co_pin_here }}</span><svg viewBox="0 0 40 52"><path d="M20 50s16-15 16-28A16 16 0 0 0 4 22c0 13 16 28 16 28z"/><circle cx="20" cy="21" r="6.5"/></svg><i></i></div>
+          <button type="button" class="co-locate" data-locate>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.5"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="7.5"/></svg>
+            <span>{{ T.co_locate }}</span>
+          </button>
+        </div>
+        <p class="co-loc-status" data-loc-status>{{ T.co_pin_hint }}</p>
+        <p class="co-geo" data-geo hidden></p>
+        <p class="co-err" data-err="location" hidden></p>
+
+        <div class="co-fields">
+          <div class="co-field"><input id="a-building" data-a="building" maxlength="150" placeholder=" " autocomplete="address-line1"><label for="a-building">{{ T.co_f_building }}</label><p class="co-err" data-err="building" hidden></p></div>
+          <div class="co-field"><input id="a-address" data-a="address" maxlength="300" placeholder=" " autocomplete="address-line2"><label for="a-address">{{ T.co_f_address }}</label><p class="co-err" data-err="address" hidden></p></div>
+          <div class="co-field"><input id="a-landmark" data-a="landmark" maxlength="150" placeholder=" "><label for="a-landmark">{{ T.landmark }}</label></div>
+          <div class="co-fields-2">
+            <div class="co-field"><input id="a-name" data-a="name" maxlength="100" placeholder=" " autocomplete="name"><label for="a-name">{{ T.your_name }}</label><p class="co-err" data-err="a-name" hidden></p></div>
+            <div class="co-field"><input id="a-phone" data-a="phone" type="tel" inputmode="numeric" maxlength="10" placeholder=" " autocomplete="tel-national"><label for="a-phone">{{ T.phone }}</label><p class="co-err" data-err="a-phone" hidden></p></div>
+          </div>
+        </div>
+        <p class="co-label">{{ T.co_save_as }}</p>
+        <div class="co-chips co-tags" role="radiogroup" aria-label="{{ T.co_save_as }}">
+          <label class="co-chip"><input type="radio" name="a_tag" value="home" checked><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11 12 4l8 7v9h-5v-6H9v6H4z"/></svg>{{ T.co_home }}</span></label>
+          <label class="co-chip"><input type="radio" name="a_tag" value="office"><span><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="7" width="16" height="13" rx="2"/><path d="M9 7V5h6v2M4 12h16"/></svg>{{ T.co_office }}</span></label>
+          <label class="co-chip"><input type="radio" name="a_tag" value="other"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>{{ T.co_other }}</span></label>
+        </div>
+        <div class="co-field" data-other-wrap hidden><input id="a-other" data-a="other" maxlength="30" placeholder=" "><label for="a-other">{{ T.co_other_name }}</label></div>
+      </div>
+      <footer class="co-sheet-foot">
+        <button type="button" class="co-save" data-sheet-save><span>{{ T.co_save_addr }}</span><i class="co-sheen" aria-hidden="true"></i></button>
+      </footer>
+    </div>
+  </div>
+
+  <div class="co-busy" data-busy hidden><div><span class="co-busy-dots"><i></i><i></i><i></i></span><p>{{ T.co_placing }}</p></div></div>
+</div>
+
+<script id="co-config" type="application/json">{
+  "lang": "{{ lang }}",
+  "open": {% if st.same_day_open %}true{% else %}false{% endif %},
+  "today": "{{ st.today|date:'Y-m-d' }}",
+  "dates": [{% for d in adv_dates %}"{{ d|date:'Y-m-d' }}"{% if not forloop.last %},{% endif %}{% endfor %}],
+  "fee": {{ site.delivery_charge|default:0|stringformat:"s" }},
+  "min": {{ site.min_order_amount|default:0|stringformat:"s" }},
+  "kitchen": [{{ site.kitchen_lat|stringformat:"s" }}, {{ site.kitchen_lng|stringformat:"s" }}],
+  "radius": {{ site.delivery_radius_km|default:0 }},
+  "couponUrl": "{% url 'orders:coupon' %}",
+  "gkey": "{{ site.google_maps_key|escapejs }}",
+  "t": {
+    "pay": "{{ T.co_pay|escapejs }}", "cont": "{{ T.co_continue|escapejs }}", "today": "{{ T.co_today|escapejs }}", "asap": "{{ T.co_asap|escapejs }}",
+    "home": "{{ T.co_home|escapejs }}", "office": "{{ T.co_office|escapejs }}", "other": "{{ T.co_other|escapejs }}",
+    "edit": "{{ T.co_edit|escapejs }}", "del": "{{ T.co_delete|escapejs }}", "addNew": "{{ T.co_add_addr|escapejs }}", "addFirst": "{{ T.co_add_first|escapejs }}",
+    "addTitle": "{{ T.co_addr_title|escapejs }}", "editTitle": "{{ T.co_edit_title|escapejs }}",
+    "locating": "{{ T.co_locating|escapejs }}", "located": "{{ T.co_located|escapejs }}", "weak": "{{ T.co_loc_weak|escapejs }}", "denied": "{{ T.co_loc_denied|escapejs }}", "pinHint": "{{ T.co_pin_hint|escapejs }}", "search": "{{ T.co_search|escapejs }}",
+    "chooseAddr": "{{ T.co_choose_addr|escapejs }}", "errName": "{{ T.err_name|escapejs }}", "errPhone": "{{ T.err_phone|escapejs }}", "errBuilding": "{{ T.co_err_building|escapejs }}", "errAddress": "{{ T.err_address|escapejs }}",
+    "errLoc": "{{ T.co_err_location|escapejs }}", "errFar": "{{ T.co_err_far|escapejs }}", "errDate": "{{ T.co_err_date|escapejs }}", "errSlot": "{{ T.co_err_slot|escapejs }}", "errNet": "{{ T.co_err_network|escapejs }}",
+    "applied": "{{ T.co_applied|escapejs }}", "save": "{{ T.co_saved_amt|escapejs }}", "min": "{{ T.cd_min|escapejs }}", "free": "{{ T.free|escapejs }}",
+    "each": "{{ T.cd_each|escapejs }}", "s2": "{{ T.co_s2|escapejs }}", "s2p": "{{ T.co_s2p|escapejs }}", "laterD": "{{ T.co_later_d|escapejs }}", "remove": "{{ T.remove|escapejs }}"
+  }
+}</script>
+{% endblock %}
+{% block scripts %}
+<script src="{% static 'vendor/leaflet/leaflet.js' %}?v=1.9.4" defer></script>
+<script src="{% static 'js/checkout.js' %}?v=3" defer></script>
+{% endblock %}
